@@ -44,3 +44,9 @@ font-size: 40px;
 	left: 150px;
 }
 
+#audio{
+	position: absolute;
+	top: 710px;
+	left: 150px;
+	width: 48px;
+}

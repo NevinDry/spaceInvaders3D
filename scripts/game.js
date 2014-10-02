@@ -64,6 +64,7 @@ function createScene()
     createLight();
 
     createBackgroundParticles();
+    addStatsObject();
 		
 }
 
@@ -78,8 +79,6 @@ function draw()
 	playerspaceShipMovement();
 	playerMissile();
 	detectCollision();
-
-	console.log(konami);
 	if(konamiCode){
 		var time = Date.now() * 0.0005;	
 		h = ( 360 * ( 1.0 + time ) % 360 ) / 360;
@@ -121,11 +120,20 @@ Gestion du missile (mouvement, position)
 */
 function playerMissile()
 {
-	// lorsqu'on tire, deplacement du missile
+
 	if (Key.isDown(Key.U))		
 	{
-		shotMissile = missileSpeed*2;		
-    }
+	// lorsqu'on tire, deplacement du missile
+		if (Key.isDown(Key.U))		
+		{
+			shotMissile = missileSpeed*2;
+	
+	    }
+	}
+	if(missile.position.x > spaceship.position.x+1 && missile.position.x < spaceship.position.x+20){
+		var audio = new Audio('./song/blast.wav');
+		audio.play();
+	}
     //si le missile sort du champ de tir, on le supprime et on en créé un nouveau au vaisseau 
     if(missile.position.x > 200){
     	shotMissile = 0;
@@ -213,5 +221,16 @@ function cameraPhysics()
 	camera.rotation.x = -0.01 * (spaceship.position.y) * Math.PI/180;
 	camera.rotation.y = -60 * Math.PI/180;
 	camera.rotation.z = -90 * Math.PI/180;
+}
+
+function addStatsObject(){
+    stats = new Stats();
+    stats.setMode(0);
+
+    stats.domElement.style.position = 'absolute';
+    stats.domElement.style.left = '0px';
+    stats.domElement.style.top = '0px';
+
+    document.body.appendChild(stats.domElement);
 }
 
