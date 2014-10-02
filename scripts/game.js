@@ -7,7 +7,7 @@ var fieldWidth = 800, fieldHeight = 400;
 
 // spaceShip variables
 var spaceShipWidth, spaceShipHeight, spaceShipDepth, spaceShipQuality, h;
-var spaceShipDirY = 0, spaceShip2DirY = 0, spaceShipSpeed = 5, missileSpeed = 7, shotMissile = 0;
+var spaceShipDirY = 0, spaceShip2DirY = 0, spaceShipSpeed = 5, missileSpeed = 9, shotMissile = 0;
 var collidableMeshList = [];
 var konamiCode = false;
 
@@ -79,12 +79,17 @@ function draw()
 	playerspaceShipMovement();
 	playerMissile();
 	detectCollision();
+	
 	if(konamiCode){
 		var time = Date.now() * 0.0005;	
 		h = ( 360 * ( 1.0 + time ) % 360 ) / 360;
 		material.color.setHSL( h, 0.25, 0.5 );
 		material.size = 20;
 		spaceship.material.color.setHSL( h, 0.25, 0.2 );
+		
+		collidableMeshList.forEach(function(bunker) {
+		    bunker.material.color.setHSL( h, 0.25, 0.2 );
+		});
 	}
 
 }

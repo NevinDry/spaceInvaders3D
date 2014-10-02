@@ -29,7 +29,11 @@ if ( window.addEventListener ) {
   window.addEventListener("keydown", function(e){
   kkeys.push( e.keyCode );
   if ( kkeys.toString().indexOf( konami ) >= 0 ) {
-      konamiCode = true;
+	  if(!konamiCode){
+	      $("#audio").html('<audio autoplay controls loop><source src="song/sax.mp3" type="audio/mpeg"></audio>');
+	  }
+	  konamiCode = true;
+      
   }
 }, true);
 }
