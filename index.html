@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+	<head>
+		<link href="style.css" rel="stylesheet">
+		<title>Game</title>
+		<style>
+			body {
+				background-color: white;
+			}
+			#gameCanvas {
+				background-color: white;
+				width: 1280px;
+				height: 640px;
+				margin: auto;
+				align: center;
+			}
+			#title {
+				background-color: white;
+				color: white;
+			}
+		</style>
+	</head>
+	<body onload='setup();'>
+		<div class="title">
+			Space Invaders 3D !
+		</div>
+		<a href="#" onclick="setup();" class="regame">Rejouez</a>
+		<div id='gameCanvas'></div>
+		    <script src="libs/three.js"></script>
+		    <script src="libs/dat.gui.min.js"></script>
+		    <script src="libs/OrbitControls.js"></script>
+		    <script src="libs/EffectComposer.js"></script>
+		    <script src="libs/EffectComposer.js"></script>
+		    <script src="libs/RenderPass.js"></script>
+		    <script src="libs/CopyShader.js"></script>
+		    <script src="libs/ShaderPass.js"></script>
+		    <script src="libs/MaskPass.js"></script>
+		    <script src="libs/stats.min.js"></script>
+
+		<script src='./scripts/keyboard.js'></script>
+		<script src='./scripts/game.js'></script>
+		<script src='./scripts/entity.js'></script>
+	</body>
+</html>
