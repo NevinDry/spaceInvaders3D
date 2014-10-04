@@ -3,22 +3,6 @@
 	<head>
 		<link href="style.css" rel="stylesheet">
 		<title>Game</title>
-		<style>
-			body {
-				background-color: white;
-			}
-			#gameCanvas {
-				background-color: white;
-				width: 1280px;
-				height: 640px;
-				margin: auto;
-				align: center;
-			}
-			#title {
-				background-color: white;
-				color: white;
-			}
-		</style>
 	</head>
 	<body onload='setup();'>
 		<div class="title">
@@ -45,9 +29,14 @@
 		<script src='./scripts/stuff.js'></script>
 		
 		<div id="audio">
-			<audio autoplay controls loop >
+			<audio controls loop >
 			  <source src="song/main.mp3" type="audio/mpeg">
 			</audio>
 		</div>
+
 	</body>
+	<div class="gameOver">
+			SCORE : 420</br>
+			Rejouez ? <a href="#" onclick="regame();" >OUI</a>
+	</div>
 </html>

@@ -6,7 +6,7 @@ var renderer, scene, camera, pointLight, spotLight;
 var fieldWidth = 800, fieldHeight = 400;
 
 // spaceShip variables
-var spaceShipWidth, spaceShipHeight, spaceShipDepth, spaceShipQuality, h;
+var spaceShipWidth, spaceShipHeight, spaceShipDepth, spaceShipQuality, h, i=700;
 var spaceShipDirY = 0, spaceShip2DirY = 0, spaceShipSpeed = 5, missileSpeed = 9, shotMissile = 0;
 var collidableMeshList = [];
 var konamiCode = false;
@@ -20,6 +20,13 @@ function setup()
 	createScene();
 	draw();
 }
+
+function regame(){
+	
+	$('#gameCanvas').css({"-webkit-transform": "translateZ(0)", "-webkit-filter": "blur(0)"});
+	$('.gameOver').css({"display": "none"});
+}
+
 
 /*
 Création de la scène en faisant appel aux fonctions de génération d'objets contenues dans ENTITY.JS
@@ -55,10 +62,20 @@ function createScene()
 	createMissile();
 
 	//Initialisation des bunker de départ (entity.js)
-    createBunker(120);
-    createBunker(-120);
-    createBunker(40);
-    createBunker(-40);
+    createBunker(120,70);
+    createBunker(-120,70);
+    createBunker(40,70);
+    createBunker(-40,70);
+    
+	while(i!=450){
+		createAlien(120,i);
+		createAlien(-120,i);
+		createAlien(40,i);
+		createAlien(-40,i);
+		i = i-50;
+	}
+
+    
 
     //Que la lumière soie !
     createLight();
@@ -67,6 +84,8 @@ function createScene()
     addStatsObject();
 		
 }
+
+function createNewGame(){}
 
 /*
 Rendu dynamique dans le canvas, appel des fonctions de Gameplay (collisions, mouvement, mécanique) 
@@ -140,7 +159,7 @@ function playerMissile()
 		audio.play();
 	}
     //si le missile sort du champ de tir, on le supprime et on en créé un nouveau au vaisseau 
-    if(missile.position.x > 200){
+    if(missile.position.x > 300){
     	shotMissile = 0;
     	scene.remove(missile);
     	createMissile();
@@ -197,17 +216,9 @@ function playerspaceShipMovement()
 	}
 
 
-	if (Key.isDown(Key.D))		
+	if (Key.isDown(Key.M))		
 	{
-		spaceship.position.y += 2;
-		setTimeout(function(){spaceship.position.y -= 2;},100);
-		setTimeout(function(){spaceship.position.y += 2;},200);
-		setTimeout(function(){spaceship.position.y -= 2;},300);
-		setTimeout(function(){spaceship.position.y += 2;},400);
-		setTimeout(function(){spaceship.position.y -= 2;},500);
-		setTimeout(function(){spaceship.position.y += 2;},600);
-		setTimeout(function(){spaceship.position.y -= 2;},700);	
-
+		finPartie();
 	}
 
 }
@@ -237,5 +248,27 @@ function addStatsObject(){
     stats.domElement.style.top = '0px';
 
     document.body.appendChild(stats.domElement);
+}
+
+function finPartie(){
+	var audio = new Audio('./song/boom.mp3');
+	audio.play();
+	spaceship.position.y += 2;
+	spaceship.material.opacity -= 0.2;
+	setTimeout(function(){spaceship.material.opacity -= 0.2},300);
+	setTimeout(function(){spaceship.material.opacity -= 0.2},500);
+	setTimeout(function(){spaceship.material.opacity -= 0.4},700);
+	setTimeout(function(){spaceship.position.y -= 2;},100);
+	setTimeout(function(){spaceship.position.y += 2;},200);
+	setTimeout(function(){spaceship.position.y -= 2;},300);
+	setTimeout(function(){spaceship.position.y += 2;},400);
+	setTimeout(function(){spaceship.position.y -= 2;},500);
+	setTimeout(function(){spaceship.position.y += 2;},600);
+	setTimeout(function(){spaceship.position.y -= 2;},700);
+	scene.remove(missile);
+	setTimeout(function(){scene.remove(spaceship)},800);
+	setTimeout(function(){$('#gameCanvas').css("-webkit-filter", "blur(5px)")},900);
+	setTimeout(function(){$('.gameOver').css({"display": "block"})},900);
+   
 }
 

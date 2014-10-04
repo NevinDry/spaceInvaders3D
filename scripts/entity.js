@@ -56,7 +56,8 @@ function createSpaceShip(fieldWidth){
 	var spaceshipMaterial =
 	  new THREE.MeshLambertMaterial(
 		{
-		  color: 0x1B32C0
+		  color: 0x1B32C0,
+		  transparent: true
 		});
 
 	var radius = 5,
@@ -92,6 +93,20 @@ function createSpaceShip(fieldWidth){
 	spaceship.position.z = spaceShipDepth+5;
 }
 
+function createAlien(position, distance){
+	var geometry = new THREE.BoxGeometry(20,20,20);
+    var material = new THREE.MeshBasicMaterial({color: 0x1ED537, transparent: true});
+    var alien = new THREE.Mesh(geometry,material);
+	
+	scene.add(alien);
+	alien.receiveShadow = true;
+	alien.castShadow = true;
+    //placement des bunker par rapport a la position centrale du vaisseau	
+	alien.position.x = spaceship.position.x+distance;
+	alien.position.y = spaceship.position.y+position;
+	alien.position.z = 20;
+}
+
 /*
 Créaton du missile
 */
@@ -111,7 +126,7 @@ function createMissile(){
 /*
 Création des bunker avec un attribut d'opacité (les bunkers sont immobiles)
 */
-function createBunker(position){
+function createBunker(position, distance){
 	var geometry = new THREE.BoxGeometry(6,30,30);
     var material = new THREE.MeshBasicMaterial({color: 0x342009, transparent: true});
     var bunker = new THREE.Mesh(geometry,material);
@@ -120,7 +135,7 @@ function createBunker(position){
 	bunker.receiveShadow = true;
     bunker.castShadow = true;
     //placement des bunker par rapport a la position centrale du vaisseau	
-	bunker.position.x = spaceship.position.x+80;
+	bunker.position.x = spaceship.position.x+distance;
 	bunker.position.y = spaceship.position.y+position;
 	bunker.position.z = 20;
 	collidableMeshList.push(bunker);

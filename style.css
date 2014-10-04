@@ -1,10 +1,18 @@
 .title{
-color:black;
+color:white;
 text-align: center;
 margin:auto;
 font-size: 40px;
 }
 
+#gameCanvas {
+	background-color: white;
+	width: 1280px;
+	height: 640px;
+	margin: auto;
+	align: center;
+}
+			
 .regame{
 	-moz-box-shadow:inset 0px 1px 0px 0px #f9eca0;
 	-webkit-box-shadow:inset 0px 1px 0px 0px #f9eca0;
@@ -52,4 +60,28 @@ font-size: 40px;
 
 audio{
 	width: 48px;
+}
+
+body {
+   background-color: black;
+}
+
+
+
+html, body, iframe { border: 0; }
+
+
+.gameOver a{
+	text-decoration:none;
+	color: #FFFFFF;
+}
+
+.gameOver{
+	display:none;
+	font-size:70px;
+	color:white;
+	position:absolute;
+	top:40%;
+	right:50%;
+	z-index:10;
 }

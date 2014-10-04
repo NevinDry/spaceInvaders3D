@@ -9,6 +9,7 @@ var Key = {
   R: 39,
   S: 83,
   D: 40,
+  M: 77,
   SPACE: 32,
   
   isDown: function(keyCode) {
