@@ -6,7 +6,7 @@ var renderer, scene, camera, pointLight, spotLight;
 var fieldWidth = 800, fieldHeight = 400;
 
 // spaceShip variables
-var spaceShipWidth, spaceShipHeight, spaceShipDepth, spaceShipQuality, h, i=700;
+var spaceShipWidth, spaceShipHeight, spaceShipDepth, spaceShipQuality, h, i=700, ingame=false;
 var spaceShipDirY = 0, spaceShip2DirY = 0, spaceShipSpeed = 5, missileSpeed = 9, shotMissile = 0;
 var collidableMeshList = [];
 var konamiCode = false;
@@ -20,13 +20,6 @@ function setup()
 	createScene();
 	draw();
 }
-
-function regame(){
-	
-	$('#gameCanvas').css({"-webkit-transform": "translateZ(0)", "-webkit-filter": "blur(0)"});
-	$('.gameOver').css({"display": "none"});
-}
-
 
 /*
 Création de la scène en faisant appel aux fonctions de génération d'objets contenues dans ENTITY.JS
@@ -47,14 +40,40 @@ function createScene()
 	createCamera(WIDTH, HEIGHT);
 	renderer.setSize(WIDTH, HEIGHT);
 
-	if(c.firstChild != null){
-		c.removeChild(c.firstChild);
-	}
 	c.appendChild(renderer.domElement);
 
 	//Création du plan perspective (entity.js)
 	createPlane(fieldWidth, fieldHeight);
+    
 
+    //Que la lumière soie !
+    createLight();
+
+    createBackgroundParticles();
+		
+}
+
+function gamePlay(){	
+	splashScreenBeforeGame();
+	setTimeout(function(){$('#gameCanvas').css({"display": "block"})},2400);
+	setTimeout(function(){createElement()},2400);
+	setTimeout(function(){ingame=true},2401);
+	$('.gameOver').css({"display": "none"});
+	$('.goGame').css({"display": "none"});
+}
+
+function splashScreenBeforeGame(){
+	$('.countdown').css({"display": "block"});
+	$('.countdown').html("3");
+	setTimeout(function(){$('.countdown').html("2")},700);
+	setTimeout(function(){$('.countdown').html("1")},1400);
+	setTimeout(function(){$('.countdown').html("GO !")},2100);
+	setTimeout(function(){$('.countdown').css({"display": "none"})},2400);
+	setTimeout(function(){$('#gameCanvas').css({"-webkit-transform": "translateZ(0)", "-webkit-filter": "blur(0)"})},2400);
+}
+
+
+function createElement(){
 	//Création du vaisseau :P (entity.js)
 	createSpaceShip(fieldWidth);
 
@@ -67,48 +86,41 @@ function createScene()
     createBunker(40,70);
     createBunker(-40,70);
     
+    /*
 	while(i!=450){
 		createAlien(120,i);
 		createAlien(-120,i);
 		createAlien(40,i);
 		createAlien(-40,i);
 		i = i-50;
-	}
-
-    
-
-    //Que la lumière soie !
-    createLight();
-
-    createBackgroundParticles();
-    addStatsObject();
-		
+	}	
+	*/
 }
-
-function createNewGame(){}
 
 /*
 Rendu dynamique dans le canvas, appel des fonctions de Gameplay (collisions, mouvement, mécanique) 
 */
 function draw()
-{	
+{		
 	renderer.render(scene, camera);
 	requestAnimationFrame(draw);
-	cameraPhysics();
-	playerspaceShipMovement();
-	playerMissile();
-	detectCollision();
-	
-	if(konamiCode){
-		var time = Date.now() * 0.0005;	
-		h = ( 360 * ( 1.0 + time ) % 360 ) / 360;
-		material.color.setHSL( h, 0.25, 0.5 );
-		material.size = 20;
-		spaceship.material.color.setHSL( h, 0.25, 0.2 );
+	if(ingame){
+		cameraPhysics();
+		playerspaceShipMovement();
+		playerMissile();
+		detectCollision();
 		
-		collidableMeshList.forEach(function(bunker) {
-		    bunker.material.color.setHSL( h, 0.25, 0.2 );
-		});
+		if(konamiCode){
+			var time = Date.now() * 0.0005;	
+			h = ( 360 * ( 1.0 + time ) % 360 ) / 360;
+			material.color.setHSL( h, 0.25, 0.5 );
+			material.size = 20;
+			spaceship.material.color.setHSL( h, 0.25, 0.2 );
+			
+			collidableMeshList.forEach(function(bunker) {
+			    bunker.material.color.setHSL( h, 0.25, 0.2 );
+			});
+		}
 	}
 
 }
@@ -239,25 +251,15 @@ function cameraPhysics()
 	camera.rotation.z = -90 * Math.PI/180;
 }
 
-function addStatsObject(){
-    stats = new Stats();
-    stats.setMode(0);
-
-    stats.domElement.style.position = 'absolute';
-    stats.domElement.style.left = '0px';
-    stats.domElement.style.top = '0px';
-
-    document.body.appendChild(stats.domElement);
-}
-
 function finPartie(){
 	var audio = new Audio('./song/boom.mp3');
 	audio.play();
+	scene.remove(missile);
 	spaceship.position.y += 2;
 	spaceship.material.opacity -= 0.2;
 	setTimeout(function(){spaceship.material.opacity -= 0.2},300);
 	setTimeout(function(){spaceship.material.opacity -= 0.2},500);
-	setTimeout(function(){spaceship.material.opacity -= 0.4},700);
+	setTimeout(function(){spaceship.material.opacity -= 0.2},700);
 	setTimeout(function(){spaceship.position.y -= 2;},100);
 	setTimeout(function(){spaceship.position.y += 2;},200);
 	setTimeout(function(){spaceship.position.y -= 2;},300);
@@ -265,8 +267,8 @@ function finPartie(){
 	setTimeout(function(){spaceship.position.y -= 2;},500);
 	setTimeout(function(){spaceship.position.y += 2;},600);
 	setTimeout(function(){spaceship.position.y -= 2;},700);
-	scene.remove(missile);
 	setTimeout(function(){scene.remove(spaceship)},800);
+	setTimeout(function(){ingame=false},800);
 	setTimeout(function(){$('#gameCanvas').css("-webkit-filter", "blur(5px)")},900);
 	setTimeout(function(){$('.gameOver').css({"display": "block"})},900);
    
