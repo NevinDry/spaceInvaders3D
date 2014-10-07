@@ -52,6 +52,61 @@ function createPlane(fieldwidth, fieldheight){
 /*
 Création du vaisseau, placé au milieu de l'air de jeu
 */
+function createSpaceship(){
+    spaceship = new THREE.Object3D();
+    var globalMesh;
+    var spaceshipGeometry = new THREE.Geometry();
+    spaceshipMaterial = new THREE.MeshLambertMaterial({color: 0x840000,transparent: true});
+
+    var boxGeometry1 = new THREE.BoxGeometry(30, 6, 10);
+    
+    boxMesh1 = new THREE.Mesh(boxGeometry1, spaceshipMaterial);
+    boxMesh1.position.x = 0;
+    boxMesh1.position.y = 0;
+    boxMesh1.position.z = 0;
+
+    THREE.GeometryUtils.merge(spaceshipGeometry, boxMesh1);
+ 
+    var boxGeometry2 = new THREE.BoxGeometry(26,2,10);
+    boxMesh2 = new THREE.Mesh(boxGeometry2, spaceshipMaterial);
+    boxMesh2.position.x = 0;
+    boxMesh2.position.y = 4;
+    boxMesh2.position.z = 0;
+
+    THREE.GeometryUtils.merge(spaceshipGeometry, boxMesh2);
+
+    var boxGeometry3 = new THREE.BoxGeometry(6,4,10);
+    boxMesh3 = new THREE.Mesh(boxGeometry3, spaceshipMaterial);
+    boxMesh3.position.x = 0;
+    boxMesh3.position.y = 6;
+    boxMesh3.position.z = 0;
+
+    THREE.GeometryUtils.merge(spaceshipGeometry, boxMesh3);
+
+    var boxGeometry4 = new THREE.BoxGeometry(2,2,10);
+    boxMesh4 = new THREE.Mesh(boxGeometry4, spaceshipMaterial);
+    boxMesh4.position.x = 0;
+    boxMesh4.position.y = 9;
+    boxMesh4.position.z = 0;
+
+    THREE.GeometryUtils.merge(spaceshipGeometry, boxMesh4);
+  
+    spaceshipGeometry.computeFaceNormals();
+
+    globalMesh = new THREE.Mesh(spaceshipGeometry, spaceshipMaterial);
+    globalMesh.receiveShadow = true;
+    globalMesh.castShadow = true;
+    spaceship.add(globalMesh);
+    spaceship.castShadow = true;
+	spaceship.position.x = -fieldWidth/2+30;
+	spaceship.position.z = 15;
+	spaceship.rotateOnAxis(new THREE.Vector3(0,0,-1), Math.PI/2);
+    
+    spaceship.updateMatrix();
+    scene.add(spaceship);
+}
+
+/*
 function createSpaceShip(fieldWidth){
 	var spaceshipMaterial =
 	  new THREE.MeshLambertMaterial(
@@ -92,19 +147,21 @@ function createSpaceShip(fieldWidth){
 	//placement sur l'air de jeu
 	spaceship.position.z = spaceShipDepth+5;
 }
+*/
 
 function createAlien(position, distance){
-	var geometry = new THREE.BoxGeometry(20,20,20);
-    var material = new THREE.MeshBasicMaterial({color: 0x1ED537, transparent: true});
+	var geometry = new THREE.BoxGeometry(6,30,30);
+    var material = new THREE.MeshBasicMaterial({color: 0x007C21, transparent: true});
     var alien = new THREE.Mesh(geometry,material);
 	
 	scene.add(alien);
 	alien.receiveShadow = true;
 	alien.castShadow = true;
     //placement des bunker par rapport a la position centrale du vaisseau	
-	alien.position.x = spaceship.position.x+distance;
+    alien.position.x = spaceship.position.x+distance;
 	alien.position.y = spaceship.position.y+position;
 	alien.position.z = 20;
+	collidableAlienList.push(alien);
 }
 
 /*
@@ -116,8 +173,8 @@ function createMissile(){
     missile = new THREE.Mesh(geometry,material);
     missile.castShadow = true;
     missile.receiveShadow = true;
-    //on place le missile dans le vaisseau
-    missile.position.x = spaceship.position.x;
+    //on place le missile dans le vaisseau (+1.3 pour sadapter au mesh)
+    missile.position.x = spaceship.position.x+gapWithMesh;
     missile.position.y = spaceship.position.y;
     missile.position.z = spaceship.position.z;
     scene.add(missile);
