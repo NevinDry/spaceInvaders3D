@@ -87,10 +87,10 @@ function createElement(){
 
 	//Initialisation des bunker de départ (entity.js)
 
-	createBunker(120,80);
-    createBunker(-120,80);
-    createBunker(40,80);
-    createBunker(-40,80);
+	createBunker(120,100);
+    createBunker(-120,100);
+    createBunker(40,100);
+    createBunker(-40,100);
 
    
 	while(positionInitialAlien!=450){
@@ -176,7 +176,6 @@ function detectIfSpaceshipMissileCollisionAlien(){
 	casterAlien.far = missileSpeed*2;
 	  //On test s'il y a une collision
 	  var collisionsAlien = casterAlien.intersectObjects(collidableAlienList);
-	  console.log(collidableAlienList);
 	  if (collisionsAlien.length > 0) {
 			scene.remove(collisionsAlien[0].object);
 	  		scene.remove(missile);
@@ -189,35 +188,46 @@ function detectIfSpaceshipMissileCollisionAlien(){
 }
 
 function detectCollisionFromMissileAlien(){
-	collidableMissileAlien.forEach(function(missileAlien) {
-		var caster = new THREE.Raycaster();
-		  caster.set(missileAlien.position, new THREE.Vector3(1, 0, 1));
+	for (var i = 0; i < collidableMissileAlien.length; i++) {
+		  var caster = new THREE.Raycaster();
+		  caster.set(collidableMissileAlien[i].position, new THREE.Vector3(1, 0, 1));
+		  caster.far = missileSpeed*2;
+		 
 		  //On test s'il y a une collision
 		  var collisionsBunker = caster.intersectObjects(collidableMeshList);
 		  if (collisionsBunker.length > 0) {
+			  console.log("olol");
+			  scene.remove(collidableMissileAlien[i]);
 		  		//SI collision il ya , on retire de l'opacité au bunker concerné, on supprime le missile qui a touché
 			  collisionsBunker[0].object.material.opacity -= 0.1;
-		  		scene.remove(missileAlien);
+			  collidableMissileAlien.splice(i--, 1);
+		  		
 		  		//on suprime le bunker quand celui si n'a plus de vie (pus d'opacité)
 		  		if(collisionsBunker[0].object.material.opacity < 0){
-		  			console.log(collidableMeshList.indexOf(collisionsBunker[0].object));
 		  			collidableMeshList.splice(collidableMeshList.indexOf(collisionsBunker[0].object),1);
 		  			scene.remove(collisionsBunker[0].object);
 		  		}
+		  }else{
+			  detectShootSpeceshipFromAlien(collidableMissileAlien[i]);
 		  }
 		  
-		  
-		  var casterSpaceship = new THREE.Raycaster();
-		  casterSpaceship.set(missileAlien.position, new THREE.Vector3(1, 0, 1));
-		  casterSpaceship.far = missileSpeed*1;
-		  //casterSpaceship.far = missileSpeed*1;
-		  //On test s'il y a une collision
-		  var collisionsSpaceship = casterSpaceship.intersectObject(spaceship);
-		  console.log(collisionsSpaceship);
-		  if (collisionsSpaceship.length > 0) {
-			  finPartie();
-		  }	
-	});
+	}
+	
+}
+
+function detectShootSpeceshipFromAlien(missileUniqueAlien){
+	var casterSpaceship = new THREE.Raycaster();
+	casterSpaceship.set(missileUniqueAlien.position, new THREE.Vector3(1, 0, 1));
+	var collisionsSpaceship = casterSpaceship.intersectObject(spaceship);
+	casterSpaceship.far = missileSpeed*2;
+	
+	if(collisionsSpaceship.length > 0) {
+		  console.log('end');
+		  scene.remove(missile);
+		  scene.remove(missileUniqueAlien);
+
+		  finPartie();
+	 }	
 }
 
 function alienAttack(){
@@ -230,8 +240,6 @@ function alienAttack(){
 	}
 	if(h > 0.35 && h < 0.38){
 		var alienShooter = Math.floor((Math.random() * collidableAlienList.length) + 0);
-		console.log(alienShooter);
-		console.log(collidableAlienList[alienShooter]);
 		createMissileAlien(collidableAlienList[alienShooter]);
 		//createMissileAlien();
 	}
@@ -249,8 +257,6 @@ Gestion du missile (mouvement, position)
 */
 function playerMissile()
 {
-
-
 	// lorsqu'on tire, deplacement du missile
 	if (Key.isDown(Key.U))		
 	{
@@ -344,8 +350,8 @@ function cameraPhysics()
 
 function finPartie(){
 	var audio = new Audio('./song/boom.mp3');
+	ingame=false;
 	audio.play();
-	scene.remove(missile);
 	spaceship.position.y += 2;
 	spaceshipMaterial.opacity -= 0.2;
 	setTimeout(function(){spaceshipMaterial.opacity -= 0.1},300);
@@ -359,7 +365,7 @@ function finPartie(){
 	setTimeout(function(){spaceship.position.y += 2;},600);
 	setTimeout(function(){spaceship.position.y -= 2;},700);
 	setTimeout(function(){scene.remove(spaceship)},800);
-	setTimeout(function(){ingame=false},800);
+	//setTimeout(function(){ingame=false},800);
 	setTimeout(function(){$('#gameCanvas').css("-webkit-filter", "blur(5px)")},900);
 	setTimeout(function(){$('.gameOver').css({"display": "block"})},900);
    

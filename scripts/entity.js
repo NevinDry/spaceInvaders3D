@@ -171,7 +171,7 @@ function createMissile(){
 }
 
 function createMissileAlien(alien){
-	var geometry = new THREE.BoxGeometry(5,3,3);
+	var geometry = new THREE.BoxGeometry(5,8,8);
     var material = new THREE.MeshBasicMaterial({color: 0x5D0054});
     missileAlien = new THREE.Mesh(geometry,material);
     missileAlien.castShadow = true;
