@@ -7,9 +7,12 @@ var fieldWidth = 800, fieldHeight = 400;
 
 // spaceShip variables
 var spaceShipWidth, spaceShipHeight, spaceShipDepth, spaceShipQuality, h, positionInitialAlien=650, ingame=false, gapWithMesh=1.3, spaceshipMaterial;
-var spaceShipDirY = 0, spaceShip2DirY = 0, spaceShipSpeed = 5, missileSpeed = 8, shotMissile = 0;
+var spaceShipDirY = 0, spaceShip2DirY = 0, spaceShipSpeed = 5, missileSpeed = 9, shotMissile = 0;
+var missileAlien;
+var collidableMissileAlien = [];
 var collidableMeshList = [];
 var collidableAlienList = [];
+var frequenceTir = 2000;
 var konamiCode = false;
 
 
@@ -117,7 +120,9 @@ function draw()
 		playerspaceShipMovement();
 		playerMissile();
 		detectCollisionBunker();
-		detectCollisionAlien();
+		detectIfSpaceshipMissileCollisionAlien();
+		detectCollisionFromMissileAlien();
+		alienAttack();
 		
 		if(konamiCode){
 			var time = Date.now() * 0.0005;	
@@ -128,6 +133,10 @@ function draw()
 			
 			collidableMeshList.forEach(function(bunker) {
 			    bunker.material.color.setHSL( h, 0.25, 0.2 );
+			});
+			
+			collidableAlienList.forEach(function(alien) {
+				alien.material.color.setHSL( h, 0.25, 0.2 );
 			});
 		}
 	}
@@ -160,21 +169,79 @@ function detectCollisionBunker(){
 	  }
 }
 
-function detectCollisionAlien(){
+function detectIfSpaceshipMissileCollisionAlien(){
 	//utilisation de Raycaster
 	var casterAlien = new THREE.Raycaster();
 	casterAlien.set(missile.position, new THREE.Vector3(1, 0, 0));
 	casterAlien.far = missileSpeed*2;
 	  //On test s'il y a une collision
 	  var collisionsAlien = casterAlien.intersectObjects(collidableAlienList);
+	  console.log(collidableAlienList);
 	  if (collisionsAlien.length > 0) {
 			scene.remove(collisionsAlien[0].object);
 	  		scene.remove(missile);
   			collidableAlienList.splice(collidableAlienList.indexOf(collisionsAlien[0].object),1);
 	  		shotMissile = 0;
-	  		//on recréé un missile sous le vaisseau
+	  		//on recr�� un missile sous le vaisseau
 	  		createMissile();
 	  }
+	
+}
+
+function detectCollisionFromMissileAlien(){
+	collidableMissileAlien.forEach(function(missileAlien) {
+		var caster = new THREE.Raycaster();
+		  caster.set(missileAlien.position, new THREE.Vector3(1, 0, 1));
+		  //On test s'il y a une collision
+		  var collisionsBunker = caster.intersectObjects(collidableMeshList);
+		  if (collisionsBunker.length > 0) {
+		  		//SI collision il ya , on retire de l'opacité au bunker concerné, on supprime le missile qui a touché
+			  collisionsBunker[0].object.material.opacity -= 0.1;
+		  		scene.remove(missileAlien);
+		  		//on suprime le bunker quand celui si n'a plus de vie (pus d'opacité)
+		  		if(collisionsBunker[0].object.material.opacity < 0){
+		  			console.log(collidableMeshList.indexOf(collisionsBunker[0].object));
+		  			collidableMeshList.splice(collidableMeshList.indexOf(collisionsBunker[0].object),1);
+		  			scene.remove(collisionsBunker[0].object);
+		  		}
+		  }
+		  
+		  
+		  var casterSpaceship = new THREE.Raycaster();
+		  casterSpaceship.set(missileAlien.position, new THREE.Vector3(1, 0, 1));
+		  casterSpaceship.far = missileSpeed*1;
+		  //casterSpaceship.far = missileSpeed*1;
+		  //On test s'il y a une collision
+		  var collisionsSpaceship = casterSpaceship.intersectObject(spaceship);
+		  console.log(collisionsSpaceship);
+		  if (collisionsSpaceship.length > 0) {
+			  finPartie();
+		  }	
+	});
+}
+
+function alienAttack(){
+	var time = Date.now() * 0.0005;	
+	h = ( 360 * ( 1.0 + time ) % 360 ) / 360;
+	if(h > 0.95 && h < 0.98){
+		var alienShooter = Math.floor((Math.random() * collidableAlienList.length) + 0);
+		createMissileAlien(collidableAlienList[alienShooter]);
+		//createMissileAlien();
+	}
+	if(h > 0.35 && h < 0.38){
+		var alienShooter = Math.floor((Math.random() * collidableAlienList.length) + 0);
+		console.log(alienShooter);
+		console.log(collidableAlienList[alienShooter]);
+		createMissileAlien(collidableAlienList[alienShooter]);
+		//createMissileAlien();
+	}
+	collidableMissileAlien.forEach(function(missile) {
+		 missile.position.x -= missileSpeed*1;
+		 if(missile.position.x < -400){
+			 scene.remove(missile);
+		 }
+	});
+	
 }
 
 /*
