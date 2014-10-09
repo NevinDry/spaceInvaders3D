@@ -67,6 +67,11 @@ audio{
 
 body {
    background-color: black;
+   background-position: center;
+   background: url("image/background.jpg");
+   background-repeat : no-repeat;
+   background-size: cover;
+   background-repeat: no-repeat;
 }
 
 

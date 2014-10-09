@@ -39,3 +39,15 @@ if ( window.addEventListener ) {
 }, true);
 }
 
+window.addEventListener( 'keypress', function( e ) { 
+	if(begin){
+		if (e.keyCode = "32")		
+		{
+			console.log("début");
+			gamePlay();
+			begin = false;
+	    }
+	}
+} );
+
+

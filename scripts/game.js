@@ -7,7 +7,7 @@ var fieldWidth = 800, fieldHeight = 400;
 
 // spaceShip variables
 var spaceShipWidth, spaceShipHeight, spaceShipDepth, spaceShipQuality, h, positionInitialAlien=650, ingame=false, gapWithMesh=1.3, spaceshipMaterial;
-var spaceShipDirY = 0, spaceShip2DirY = 0, spaceShipSpeed = 5, missileSpeed = 9, shotMissile = 0;
+var spaceShipDirY = 0, spaceShip2DirY = 0, spaceShipSpeed = 5, missileSpeed = 9, shotMissile = 0, begin = true;
 var missileAlien;
 var collidableMissileAlien = [];
 var collidableMeshList = [];
@@ -177,6 +177,8 @@ function detectIfSpaceshipMissileCollisionAlien(){
 	  //On test s'il y a une collision
 	  var collisionsAlien = casterAlien.intersectObjects(collidableAlienList);
 	  if (collisionsAlien.length > 0) {
+			var audio = new Audio('./song/murloc.ogg');
+			audio.play();
 			scene.remove(collisionsAlien[0].object);
 	  		scene.remove(missile);
   			collidableAlienList.splice(collidableAlienList.indexOf(collisionsAlien[0].object),1);
@@ -368,6 +370,7 @@ function finPartie(){
 	//setTimeout(function(){ingame=false},800);
 	setTimeout(function(){$('#gameCanvas').css("-webkit-filter", "blur(5px)")},900);
 	setTimeout(function(){$('.gameOver').css({"display": "block"})},900);
+	begin = true;
    
 }
 
