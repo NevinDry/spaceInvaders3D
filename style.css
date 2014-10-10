@@ -14,8 +14,8 @@ margin-bottom:15px;
 
 #gameCanvas {
 	background-color: white;
-	width: 1280px;
-	height: 640px;
+	width: 1080px;
+	height: 600px;
 	margin: auto;
 	align: center;
 	-webkit-filter: blur(5px);
@@ -101,4 +101,24 @@ html, body, iframe { border: 0; }
 	top:45%;
 	right:45%;
 	z-index:10;
+}
+
+.annonce{
+	color: white;
+	position: absolute;
+	top: 100px;
+	right: 1px;;
+	width: 180px;
+	font-size: 31px;
+}
+
+.score{
+color: white;
+float: right;
+width: 180px;
+font-size: 31px;
+position: absolute;
+top: 300px;
+right: 1px;
+display:none;
 }

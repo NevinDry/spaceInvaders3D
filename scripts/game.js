@@ -8,7 +8,7 @@ var fieldWidth = 800, fieldHeight = 400;
 // spaceShip variables
 var spaceShipWidth, spaceShipHeight, spaceShipDepth, spaceShipQuality, h, positionInitialAlien=650, ingame=false, gapWithMesh=1.3, spaceshipMaterial;
 var spaceShipDirY = 0, spaceShip2DirY = 0, spaceShipSpeed = 5, missileSpeed = 9, shotMissile = 0, begin = true;
-var missileAlien;
+var missileAlien, score = 0;
 var collidableMissileAlien = [];
 var collidableMeshList = [];
 var collidableAlienList = [];
@@ -31,8 +31,8 @@ CrÃ©ation de la scÃ¨ne en faisant appel aux fonctions de gÃ©nÃ©ration d'objets c
 function createScene()
 {
 	//taille de la scene
-	var HEIGHT = 1280;
-	var WIDTH = 650;
+	var HEIGHT = 1080;
+	var WIDTH = 600;
 
 	//dÃ©claration du canvas de jeu
 	var c = document.getElementById("gameCanvas");
@@ -78,6 +78,7 @@ function splashScreenBeforeGame(){
 
 
 function createElement(){
+	$('.score').css({"display": "block"});
 	//CrÃ©ation du vaisseau :P (entity.js)
 	createSpaceship(fieldWidth);
 	console.log(spaceship);
@@ -90,22 +91,9 @@ function createElement(){
 	createBunker(120,100);
     createBunker(-120,100);
     createBunker(40,100);
-    createBunker(-40,100);
-
-   
-	while(positionInitialAlien!=450){
-		createAlien(30,positionInitialAlien);
-		createAlien(-15,positionInitialAlien);
-		createAlien(75,positionInitialAlien);
-		createAlien(-60,positionInitialAlien);
-		createAlien(-100,positionInitialAlien);
-		createAlien(-145,positionInitialAlien);
-		createAlien(120,positionInitialAlien);
-		createAlien(165,positionInitialAlien);
-
-
-		positionInitialAlien = positionInitialAlien-50;
-	}	
+    createBunker(-40,100);	
+    
+    createNewWaveAlien();
 }
 
 /*
@@ -179,12 +167,20 @@ function detectIfSpaceshipMissileCollisionAlien(){
 	  if (collisionsAlien.length > 0) {
 			var audio = new Audio('./song/murloc.ogg');
 			audio.play();
+			afficherScore(50);
 			scene.remove(collisionsAlien[0].object);
 	  		scene.remove(missile);
   			collidableAlienList.splice(collidableAlienList.indexOf(collisionsAlien[0].object),1);
 	  		shotMissile = 0;
 	  		//on recréé un missile sous le vaisseau
 	  		createMissile();
+	  		if(collidableAlienList.length == 0){
+	  			console.log("Enemis éliminés");
+	  			$('.annonce').html("Bien joué, préparez vous à la prochaine vague !"); 
+	  			positionInitialAlien = 650;
+	  			setTimeout(function(){createNewWaveAlien();},2401);
+	  			setTimeout(function(){$('.annonce').html("")},2401);
+	  		}
 	  }
 	
 }
@@ -228,7 +224,7 @@ function detectShootSpeceshipFromAlien(missileUniqueAlien){
 		  scene.remove(missile);
 		  scene.remove(missileUniqueAlien);
 
-		  finPartie();
+		  mortVaisseau();
 	 }	
 }
 
@@ -252,6 +248,20 @@ function alienAttack(){
 		 }
 	});
 	
+}
+
+function createNewWaveAlien(){
+	while(positionInitialAlien!=450){
+		createAlien(30,positionInitialAlien);
+		createAlien(-15,positionInitialAlien);
+		createAlien(75,positionInitialAlien);
+		createAlien(-60,positionInitialAlien);
+		createAlien(-100,positionInitialAlien);
+		createAlien(-145,positionInitialAlien);
+		createAlien(120,positionInitialAlien);
+		createAlien(165,positionInitialAlien);
+		positionInitialAlien = positionInitialAlien-50;
+	}
 }
 
 /*
@@ -329,7 +339,7 @@ function playerspaceShipMovement()
 
 	if (Key.isDown(Key.M))		
 	{
-		finPartie();
+		 mortVaisseau();
 	}
 
 }
@@ -350,7 +360,7 @@ function cameraPhysics()
 	camera.rotation.z = -90 * Math.PI/180;
 }
 
-function finPartie(){
+function  mortVaisseau(){
 	var audio = new Audio('./song/boom.mp3');
 	ingame=false;
 	audio.play();
@@ -369,8 +379,14 @@ function finPartie(){
 	setTimeout(function(){scene.remove(spaceship)},800);
 	//setTimeout(function(){ingame=false},800);
 	setTimeout(function(){$('#gameCanvas').css("-webkit-filter", "blur(5px)")},900);
+	$('.scoreReplay').html("Score : "+ score);
 	setTimeout(function(){$('.gameOver').css({"display": "block"})},900);
 	begin = true;
    
+}
+
+function afficherScore(points){
+	score+=points;
+	$('.score').html("Score : " + score);
 }
 

@@ -133,7 +133,7 @@ function createAlien(position, distance){
     alien = new THREE.Mesh(alien2Geometry, alien2Material)    
     alien.updateMatrix();
     alien.position.x = spaceship.position.x+distance;
-	alien.position.y = spaceship.position.y+position;
+	alien.position.y = 0+position;
 	alien.position.z = 10;
 	alien.scale.set(1.5, 1.5, 1.5);
 	alien.rotateOnAxis(new THREE.Vector3(0,0,-1), Math.PI/2);
