@@ -9,6 +9,7 @@ var fieldWidth = 800, fieldHeight = 400;
 var spaceShipWidth, spaceShipHeight, spaceShipDepth, spaceShipQuality, h, positionInitialAlien=650, ingame=false, gapWithMesh=1.3, spaceshipMaterial;
 var spaceShipDirY = 0, spaceShip2DirY = 0, spaceShipSpeed = 5, missileSpeed = 9, pourcentageVitesseAlien = 0, shotMissile = 0, begin = true;
 var missileAlien, score = 0;
+var ufo;
 var collidableMissileAlien = [];
 var collidableMeshList = [];
 var collidableAlienList = [];
@@ -132,6 +133,7 @@ function draw()
 		detectCollisionFromMissileAlien();
 		alienMouvement();
 		alienAttack();
+		ufoMecanics();
 		collidableAlienList.forEach(function(alien) {
 		   if(alien.position.x == spaceship.position.x && ingame){
 		       scene.remove(missile);
@@ -157,131 +159,15 @@ function draw()
 
 }
 
-
-/*
-Détéction des collisions
-*/
-function detectCollisionBunker(){
-	//utilisation de Raycaster
-	var caster = new THREE.Raycaster();
-	  caster.set(missile.position, new THREE.Vector3(1, 0, 1));
-	  //On test s'il y a une collision
-	  var collisionsBunker = caster.intersectObjects(collidableMeshList);
-	  if (collisionsBunker.length > 0) {
-	  		//SI collision il ya , on retire de l'opacité au bunker concerné, on supprime le missile qui a touché
-		  collisionsBunker[0].object.material.opacity -= 0.1;
-	  		scene.remove(missile);
-	  		//on suprime le bunker quand celui si n'a plus de vie (pus d'opacité)
-	  		if(collisionsBunker[0].object.material.opacity < 0){
-	  			console.log(collidableMeshList.indexOf(collisionsBunker[0].object));
-	  			collidableMeshList.splice(collidableMeshList.indexOf(collisionsBunker[0].object),1);
-	  			scene.remove(collisionsBunker[0].object);
-	  		}
-	  		shotMissile = 0;
-	  		//on recréé un missile sous le vaisseau
-	  		createMissile();
-	  }
-}
-
-function detectIfSpaceshipMissileCollisionAlien(){
-	//utilisation de Raycaster
-	var casterAlien = new THREE.Raycaster();
-	casterAlien.set(missile.position, new THREE.Vector3(1, 0, 0));
-	casterAlien.far = missileSpeed*2;
-	  //On test s'il y a une collision
-	  var collisionsAlien = casterAlien.intersectObjects(collidableAlienList);
-	  if (collisionsAlien.length > 0) {
-			var audio = new Audio('./song/murloc.ogg');
-			audio.play();
-			afficherScore(50);
-			scene.remove(collisionsAlien[0].object);
-	  		scene.remove(missile);
-  			collidableAlienList.splice(collidableAlienList.indexOf(collisionsAlien[0].object),1);
-	  		shotMissile = 0;
-	  		//on recr�� un missile sous le vaisseau
-	  		createMissile();
-	  		if(collidableAlienList.length == 0){
-	  			console.log("Enemis �limin�s");
-	  			newWave();
-
-	  		}
-	  }
-	
-}
-
-
-
-function detectCollisionFromMissileAlien(){
-	for (var i = 0; i < collidableMissileAlien.length; i++) {
-		  var caster = new THREE.Raycaster();
-		  caster.set(collidableMissileAlien[i].position, new THREE.Vector3(1, 0, 1));
-		  caster.far = missileSpeed*2;
-		 
-		  //On test s'il y a une collision
-		  var collisionsBunker = caster.intersectObjects(collidableMeshList);
-		  if (collisionsBunker.length > 0) {
-			  console.log("olol");
-			  scene.remove(collidableMissileAlien[i]);
-		  		//SI collision il ya , on retire de l'opacité au bunker concerné, on supprime le missile qui a touché
-			  collisionsBunker[0].object.material.opacity -= 0.1;
-			  collidableMissileAlien.splice(i--, 1);
-		  		
-		  		//on suprime le bunker quand celui si n'a plus de vie (pus d'opacité)
-		  		if(collisionsBunker[0].object.material.opacity < 0){
-		  			collidableMeshList.splice(collidableMeshList.indexOf(collisionsBunker[0].object),1);
-		  			scene.remove(collisionsBunker[0].object);
-		  		}
-		  }else{
-			  detectShootSpeceshipFromAlien(collidableMissileAlien[i]);
-		  }
-		  
-	}
-	
-}
-
-function detectShootSpeceshipFromAlien(missileUniqueAlien){
-	var casterSpaceship = new THREE.Raycaster();
-	casterSpaceship.set(missileUniqueAlien.position, new THREE.Vector3(1, 0, 1));
-	var collisionsSpaceship = casterSpaceship.intersectObject(spaceship);
-	casterSpaceship.far = missileSpeed*2;
-	
-	if(collisionsSpaceship.length > 0 && spaceshipIsTargetable) {
-		  console.log('hit');
-		  scene.remove(missile);
-		  scene.remove(missileUniqueAlien);
-		  spaceshipLife--;
-		  if(spaceshipLife == -1){
-			  console.log("end");
-			  mortVaisseau();
-		  }else{
-			  
-			  hitSpaceship();
-		  }
-
-	 }	
-}
-
-function alienAttack(){
-	var time = Date.now() * 0.0005;	
+function ufoMecanics(){
+	var time = Date.now() * 0.00005;	
 	h = ( 360 * ( 1.0 + time ) % 360 ) / 360;
+	console.log(h);
 	if(h > 0.95 && h < 0.98){
-		var alienShooter = Math.floor((Math.random() * collidableAlienList.length) + 0);
-		createScud(collidableAlienList[alienShooter], collidableAlienList[alienShooter].name);
-		//createMissileAlien();
+		
 	}
-	if(h > 0.35 && h < 0.38){
-		var alienShooter = Math.floor((Math.random() * collidableAlienList.length) + 0);
-		createScud(collidableAlienList[alienShooter]);
-		//createMissileAlien();
-	}
-	collidableMissileAlien.forEach(function(missile) {
-		 missile.position.x -= missileSpeed*0.5;
-		 if(missile.position.x < -400){
-			 scene.remove(missile);
-		 }
-	});
-	
 }
+
 
 function createNewWaveAlien(){
 	pourcentageVitesseAlien+=0.3;
@@ -306,92 +192,6 @@ function createNewWaveAlien(){
 		}
 		
 	}
-}
-
-/*
-Gestion du missile (mouvement, position)
-*/
-function playerMissile()
-{
-	// lorsqu'on tire, deplacement du missile
-	if (Key.isDown(Key.U))		
-	{
-		shotMissile = missileSpeed*2;
-
-    }
-	if(missile.position.x > spaceship.position.x+gapWithMesh && missile.position.x < spaceship.position.x+20){
-		var audio = new Audio('./song/blast.wav');
-		audio.play();
-	}
-    //si le missile sort du champ de tir, on le supprime et on en créé un nouveau au vaisseau 
-    if(missile.position.x > 350){
-    	shotMissile = 0;
-    	scene.remove(missile);
-    	createMissile();
-    }
-    missile.position.x += shotMissile;
-}	
-
-/*
-Déplacement du vaisseau
-*/
-function playerspaceShipMovement()
-{
-	// Move gauche
-	if (Key.isDown(Key.L))		
-	{
-		//tant qu'on reste sur la table de jeu, on peut bouger
-		if (spaceship.position.y < fieldHeight * 0.45)
-		{
-			spaceshipDirY = spaceShipSpeed * 0.9;
-		}
-		
-		//Si le vaisseau arrive au bout de la table, on le stop
-		else
-		{
-			spaceshipDirY = 0;
-		}
-	}	
-	// move droite
-	else if (Key.isDown(Key.R))
-	{
-		//tant qu'on reste sur la table de jeu, on peut bouger
-		if (spaceship.position.y > -fieldHeight * 0.45)
-		{
-			spaceshipDirY = -spaceShipSpeed * 0.9;
-		}
-
-		//Si le vaisseau arrive au bout de la table, on le stop
-		else
-		{
-			spaceshipDirY = 0;
-		}
-	}
-	else
-	{
-		spaceshipDirY = 0;
-	}
-	
-	//deplacement
-	spaceship.position.y += spaceshipDirY;
-
-	//si le missile est sous le vaisseau, il se deplace avec lui
-	if(missile.position.x == spaceship.position.x+1.3){
-		missile.position.y += spaceshipDirY;
-	}
-
-
-	if (Key.isDown(Key.M))		
-	{
-		 mortVaisseau();
-	}
-
-}
-
-function alienMouvement(){
-	collidableAlienList.forEach(function(alien) {
-	    alien.position.x -= alienSpeed*pourcentageVitesseAlien;
-	});
 }
 
 /* 
