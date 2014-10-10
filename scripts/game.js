@@ -7,7 +7,7 @@ var fieldWidth = 800, fieldHeight = 400;
 
 // spaceShip variables
 var spaceShipWidth, spaceShipHeight, spaceShipDepth, spaceShipQuality, h, positionInitialAlien=650, ingame=false, gapWithMesh=1.3, spaceshipMaterial;
-var spaceShipDirY = 0, spaceShip2DirY = 0, spaceShipSpeed = 5, missileSpeed = 9, shotMissile = 0, begin = true;
+var spaceShipDirY = 0, spaceShip2DirY = 0, spaceShipSpeed = 5, missileSpeed = 9, pourcentageVitesseAlien = 0, shotMissile = 0, begin = true;
 var missileAlien, score = 0;
 var collidableMissileAlien = [];
 var collidableMeshList = [];
@@ -61,6 +61,13 @@ function createScene()
 
 function gamePlay(){	
 	splashScreenBeforeGame();
+	score = 0;
+	spaceshipLife = 2;
+	$('.life').html("Vies : "+ spaceshipLife);
+	pourcentageVitesseAlien = 0;
+	afficherScore(score);
+	 collidableAlienList = [];
+	 collidableMissileAlien = [];
 	setTimeout(function(){$('#gameCanvas').css({"display": "block"})},2400);
 	setTimeout(function(){createElement()},2400);
 	setTimeout(function(){ingame=true},2401);
@@ -125,7 +132,12 @@ function draw()
 		detectCollisionFromMissileAlien();
 		alienMouvement();
 		alienAttack();
-		
+		collidableAlienList.forEach(function(alien) {
+		   if(alien.position.x == spaceship.position.x && ingame){
+		       scene.remove(missile);
+			   mortVaisseau();
+		    }	
+		});
 		if(konamiCode){
 			var time = Date.now() * 0.0005;	
 			h = ( 360 * ( 1.0 + time ) % 360 ) / 360;
@@ -272,6 +284,7 @@ function alienAttack(){
 }
 
 function createNewWaveAlien(){
+	pourcentageVitesseAlien+=0.3;
 	var typeAlien;
 	typeAlien = "alien2";
 	while(positionInitialAlien!=450){	
@@ -377,7 +390,7 @@ function playerspaceShipMovement()
 
 function alienMouvement(){
 	collidableAlienList.forEach(function(alien) {
-	    alien.position.x -= alienSpeed*0.2;
+	    alien.position.x -= alienSpeed*pourcentageVitesseAlien;
 	});
 }
 
@@ -398,9 +411,16 @@ function cameraPhysics()
 }
 
 function  mortVaisseau(){
+	collidableAlienList.forEach(function(alien) {
+	    scene.remove(alien);
+	});
+	 collidableMissileAlien.forEach(function(alienMissile) {
+	    scene.remove(alienMissile);
+	});
 	var audio = new Audio('./song/boom.mp3');
 	ingame=false;
 	audio.play();
+	positionInitialAlien=650;
 	spaceship.position.y += 2;
 	spaceshipMaterial.opacity -= 0.2;
 	setTimeout(function(){spaceshipMaterial.opacity -= 0.1},300);
