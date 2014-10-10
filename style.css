@@ -123,3 +123,14 @@ top: 300px;
 right: 1px;
 display:none;
 }
+
+.life{
+color: white;
+float: right;
+width: 180px;
+font-size: 31px;
+position: absolute;
+top: 380px;
+right: 1px;
+display:none;
+}

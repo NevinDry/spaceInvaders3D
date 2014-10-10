@@ -15,6 +15,7 @@ var collidableAlienList = [];
 var alienSpeed = 1;
 var frequenceTir = 2000;
 var konamiCode = false;
+var spaceshipLife = 2, spaceshipIsTargetable = true;
 
 
 /*
@@ -81,6 +82,7 @@ function splashScreenBeforeGame(){
 
 function createElement(){
 	$('.score').css({"display": "block"});
+	$('.life').css({"display": "block"});
 	//CrÃ©ation du vaisseau :P (entity.js)
 	createSpaceship(fieldWidth);
 	console.log(spaceship);
@@ -96,6 +98,15 @@ function createElement(){
     createBunker(-40,100);	
     
     createNewWaveAlien();
+}
+
+
+function newWave(){
+	splashScreenBeforeGame();
+	$('.annonce').html("Bien joué, préparez vous à la prochaine vague !"); 
+	positionInitialAlien = 650;
+	setTimeout(function(){createNewWaveAlien();},2401);
+	setTimeout(function(){$('.annonce').html("")},2401);
 }
 
 /*
@@ -186,13 +197,6 @@ function detectIfSpaceshipMissileCollisionAlien(){
 	
 }
 
-function newWave(){
-	splashScreenBeforeGame();
-	$('.annonce').html("Bien joué, préparez vous à la prochaine vague !"); 
-	positionInitialAlien = 650;
-	setTimeout(function(){createNewWaveAlien();},2401);
-	setTimeout(function(){$('.annonce').html("")},2401);
-}
 
 
 function detectCollisionFromMissileAlien(){
@@ -229,12 +233,19 @@ function detectShootSpeceshipFromAlien(missileUniqueAlien){
 	var collisionsSpaceship = casterSpaceship.intersectObject(spaceship);
 	casterSpaceship.far = missileSpeed*2;
 	
-	if(collisionsSpaceship.length > 0) {
-		  console.log('end');
+	if(collisionsSpaceship.length > 0 && spaceshipIsTargetable) {
+		  console.log('hit');
 		  scene.remove(missile);
 		  scene.remove(missileUniqueAlien);
+		  spaceshipLife--;
+		  if(spaceshipLife == -1){
+			  console.log("end");
+			  mortVaisseau();
+		  }else{
+			  
+			  hitSpaceship();
+		  }
 
-		  mortVaisseau();
 	 }	
 }
 
@@ -409,6 +420,26 @@ function  mortVaisseau(){
 	setTimeout(function(){$('.gameOver').css({"display": "block"})},900);
 	begin = true;
    
+}
+
+function hitSpaceship(){
+	spaceshipIsTargetable = false;
+	scene.remove(missile);
+	spaceshipMaterial.opacity -= 1;
+	setTimeout(function(){spaceshipMaterial.opacity += 1},50);
+	setTimeout(function(){spaceshipMaterial.opacity -= 1},100);
+	setTimeout(function(){spaceshipMaterial.opacity += 1},150);
+	setTimeout(function(){spaceshipMaterial.opacity -= 1},200);
+	setTimeout(function(){spaceshipMaterial.opacity += 1},250);
+	setTimeout(function(){spaceshipMaterial.opacity -= 1},300);
+	setTimeout(function(){spaceshipMaterial.opacity += 1},350);
+	setTimeout(function(){spaceshipMaterial.opacity -= 1},400);
+	setTimeout(function(){spaceshipMaterial.opacity += 1},450);
+
+	
+	setTimeout(function(){createMissile()},451);
+	setTimeout(function(){spaceshipIsTargetable = true},451);
+	$('.life').html("Vies : "+ spaceshipLife);
 }
 
 function afficherScore(points){

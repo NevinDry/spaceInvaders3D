@@ -98,7 +98,6 @@ function createSpaceship(){
 	spaceship.position.x = -fieldWidth/2+30;
 	spaceship.position.z = 15;
 	spaceship.rotateOnAxis(new THREE.Vector3(0,0,-1), Math.PI/2);
-	spaceship.rotateOnAxis(new THREE.Vector3(1,0,0), Math.PI/4);
 
     spaceship.updateMatrix();
     scene.add(spaceship);
