@@ -12,6 +12,7 @@ var missileAlien, score = 0;
 var collidableMissileAlien = [];
 var collidableMeshList = [];
 var collidableAlienList = [];
+var alienSpeed = 1;
 var frequenceTir = 2000;
 var konamiCode = false;
 
@@ -68,10 +69,11 @@ function gamePlay(){
 
 function splashScreenBeforeGame(){
 	$('.countdown').css({"display": "block"});
-	$('.countdown').html("3");
-	setTimeout(function(){$('.countdown').html("2")},700);
-	setTimeout(function(){$('.countdown').html("1")},1400);
-	setTimeout(function(){$('.countdown').html("GO !")},2100);
+	$('.countdown').html("*3*");
+	setTimeout(function(){$('.countdown').html("*2*")},700);
+	setTimeout(function(){$('.countdown').html("*1*")},1400);
+	setTimeout(function(){$('.countdown').html("GO!")},2100);
+	setTimeout(function(){$('.countdown').css( "color", "red")},2100);
 	setTimeout(function(){$('.countdown').css({"display": "none"})},2400);
 	setTimeout(function(){$('#gameCanvas').css({"-webkit-transform": "translateZ(0)", "-webkit-filter": "blur(0)"})},2400);
 }
@@ -110,6 +112,7 @@ function draw()
 		detectCollisionBunker();
 		detectIfSpaceshipMissileCollisionAlien();
 		detectCollisionFromMissileAlien();
+		alienMouvement();
 		alienAttack();
 		
 		if(konamiCode){
@@ -176,14 +179,21 @@ function detectIfSpaceshipMissileCollisionAlien(){
 	  		createMissile();
 	  		if(collidableAlienList.length == 0){
 	  			console.log("Enemis éliminés");
-	  			$('.annonce').html("Bien joué, préparez vous à la prochaine vague !"); 
-	  			positionInitialAlien = 650;
-	  			setTimeout(function(){createNewWaveAlien();},2401);
-	  			setTimeout(function(){$('.annonce').html("")},2401);
+	  			newWave();
+
 	  		}
 	  }
 	
 }
+
+function newWave(){
+	splashScreenBeforeGame();
+	$('.annonce').html("Bien joué, préparez vous à la prochaine vague !"); 
+	positionInitialAlien = 650;
+	setTimeout(function(){createNewWaveAlien();},2401);
+	setTimeout(function(){$('.annonce').html("")},2401);
+}
+
 
 function detectCollisionFromMissileAlien(){
 	for (var i = 0; i < collidableMissileAlien.length; i++) {
@@ -233,16 +243,16 @@ function alienAttack(){
 	h = ( 360 * ( 1.0 + time ) % 360 ) / 360;
 	if(h > 0.95 && h < 0.98){
 		var alienShooter = Math.floor((Math.random() * collidableAlienList.length) + 0);
-		createMissileAlien(collidableAlienList[alienShooter]);
+		createScud(collidableAlienList[alienShooter], collidableAlienList[alienShooter].name);
 		//createMissileAlien();
 	}
 	if(h > 0.35 && h < 0.38){
 		var alienShooter = Math.floor((Math.random() * collidableAlienList.length) + 0);
-		createMissileAlien(collidableAlienList[alienShooter]);
+		createScud(collidableAlienList[alienShooter]);
 		//createMissileAlien();
 	}
 	collidableMissileAlien.forEach(function(missile) {
-		 missile.position.x -= missileSpeed*1;
+		 missile.position.x -= missileSpeed*0.5;
 		 if(missile.position.x < -400){
 			 scene.remove(missile);
 		 }
@@ -251,16 +261,26 @@ function alienAttack(){
 }
 
 function createNewWaveAlien(){
-	while(positionInitialAlien!=450){
-		createAlien(30,positionInitialAlien);
-		createAlien(-15,positionInitialAlien);
-		createAlien(75,positionInitialAlien);
-		createAlien(-60,positionInitialAlien);
-		createAlien(-100,positionInitialAlien);
-		createAlien(-145,positionInitialAlien);
-		createAlien(120,positionInitialAlien);
-		createAlien(165,positionInitialAlien);
+	var typeAlien;
+	typeAlien = "alien2";
+	while(positionInitialAlien!=450){	
+		createAlien(30,positionInitialAlien, typeAlien);
+		console.log(collidableAlienList);
+		createAlien(-15,positionInitialAlien, typeAlien);
+		createAlien(75,positionInitialAlien, typeAlien);
+		createAlien(-60,positionInitialAlien,typeAlien);
+		createAlien(-100,positionInitialAlien,typeAlien);
+		createAlien(-145,positionInitialAlien,typeAlien);
+		createAlien(120,positionInitialAlien,typeAlien);
+		createAlien(165,positionInitialAlien,typeAlien);
 		positionInitialAlien = positionInitialAlien-50;
+		if(typeAlien == "alien2"){
+			typeAlien = "alien3";
+		}
+		else{
+			typeAlien = "alien2";
+		}
+		
 	}
 }
 
@@ -342,6 +362,12 @@ function playerspaceShipMovement()
 		 mortVaisseau();
 	}
 
+}
+
+function alienMouvement(){
+	collidableAlienList.forEach(function(alien) {
+	    alien.position.x -= alienSpeed*0.2;
+	});
 }
 
 /* 

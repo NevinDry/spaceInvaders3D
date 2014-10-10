@@ -98,60 +98,10 @@ function createSpaceship(){
 	spaceship.position.x = -fieldWidth/2+30;
 	spaceship.position.z = 15;
 	spaceship.rotateOnAxis(new THREE.Vector3(0,0,-1), Math.PI/2);
-    
+	spaceship.rotateOnAxis(new THREE.Vector3(1,0,0), Math.PI/4);
+
     spaceship.updateMatrix();
     scene.add(spaceship);
-}
-
-
-function createAlien(position, distance){
-    var halfMesh;
-    var alien;
-    var alien2Geometry = new THREE.Geometry();
-    var alien2Material = new THREE.MeshLambertMaterial({color: 'green'});
-
-    // arguments de la fonction returnMesh(sizeX, sizeY, sizeZ, posX, posY, posZ, itemMaterial)
-
-    THREE.GeometryUtils.merge(alien2Geometry, returnCustomBoxMesh(2,6,5,-10.5,4,0, alien2Material));
-    THREE.GeometryUtils.merge(alien2Geometry, returnCustomBoxMesh(2,4,5,-8.5,7,0, alien2Material));
-    THREE.GeometryUtils.merge(alien2Geometry, returnCustomBoxMesh(2,10,5,-6.5,6,0,alien2Material));
-    THREE.GeometryUtils.merge(alien2Geometry, returnCustomBoxMesh(2,2,5,-6.5,14,0,alien2Material));
-    THREE.GeometryUtils.merge(alien2Geometry, returnCustomBoxMesh(2,4,5,-4.5,11,0,alien2Material));
-    THREE.GeometryUtils.merge(alien2Geometry, returnCustomBoxMesh(2,4,5,-4.5,5,0,alien2Material));
-    THREE.GeometryUtils.merge(alien2Geometry, returnCustomBoxMesh(4,2,5,-4,0,0,alien2Material));
-    THREE.GeometryUtils.merge(alien2Geometry, returnCustomBoxMesh(4,8,5,-1.75,7,0,alien2Material));
-
-    halfMesh = new THREE.Mesh(alien2Geometry, alien2Material);
-
-    halfMesh.rotation.y = Math.PI;
-    halfMesh.position.x = 0;
-
-    THREE.GeometryUtils.merge(alien2Geometry, halfMesh);
-
-    alien2Geometry.computeFaceNormals();
-
-    alien = new THREE.Mesh(alien2Geometry, alien2Material)    
-    alien.updateMatrix();
-    alien.position.x = spaceship.position.x+distance;
-	alien.position.y = 0+position;
-	alien.position.z = 10;
-	alien.scale.set(1.5, 1.5, 1.5);
-	alien.rotateOnAxis(new THREE.Vector3(0,0,-1), Math.PI/2);
-	alien.rotateOnAxis(new THREE.Vector3(1,0,0), Math.PI/4);
-	scene.add(alien);
-	alien.receiveShadow = true;
-	alien.castShadow = true;
-	collidableAlienList.push(alien);
-}
-
-function returnCustomBoxMesh(sizeX, sizeY, sizeZ, posX, posY, posZ, itemMaterial){
-    var boxGeometry = new THREE.BoxGeometry(sizeX, sizeY, sizeZ);
-    boxMesh = new THREE.Mesh(boxGeometry, itemMaterial);
-    boxMesh.position.x = posX;
-    boxMesh.position.y = posY;
-    boxMesh.position.z = posZ;
-
-    return boxMesh;
 }
 
 /*
@@ -168,20 +118,6 @@ function createMissile(){
     missile.position.y = spaceship.position.y;
     missile.position.z = spaceship.position.z;
     scene.add(missile);
-}
-
-function createMissileAlien(alien){
-	var geometry = new THREE.BoxGeometry(5,8,8);
-    var material = new THREE.MeshBasicMaterial({color: 0x5D0054});
-    missileAlien = new THREE.Mesh(geometry,material);
-    missileAlien.castShadow = true;
-    missileAlien.receiveShadow = true;
-    //on place le missile dans le vaisseau (+1.3 pour sadapter au mesh)
-    missileAlien.position.x = alien.position.x+gapWithMesh;
-    missileAlien.position.y = alien.position.y;
-    missileAlien.position.z = alien.position.z;
-    collidableMissileAlien.push(missileAlien);
-    scene.add(missileAlien);
 }
 
 /*

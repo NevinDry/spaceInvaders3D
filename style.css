@@ -95,16 +95,17 @@ html, body, iframe { border: 0; }
 }
 
 .countdown{
-	font-size:150px;
-	color:white;
+	font-size:100px;
+	color:black;
+	text-align:center;
 	position:absolute;
 	top:45%;
-	right:45%;
+	right:46%;
 	z-index:10;
 }
 
 .annonce{
-	color: white;
+	color: red;
 	position: absolute;
 	top: 100px;
 	right: 1px;;
