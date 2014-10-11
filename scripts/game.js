@@ -8,12 +8,13 @@ var fieldWidth = 800, fieldHeight = 400;
 // spaceShip variables
 var spaceShipWidth, spaceShipHeight, spaceShipDepth, spaceShipQuality, h, positionInitialAlien=650, ingame=false, gapWithMesh=1.3, spaceshipMaterial;
 var spaceShipDirY = 0, spaceShip2DirY = 0, spaceShipSpeed = 5, missileSpeed = 9, pourcentageVitesseAlien = 0, shotMissile = 0, begin = true;
-var missileAlien, score = 0;
-var ufo;
+var missileAlien, score = 0, lol =0;;
+var ufo = true, ufoBullet= false;
 var collidableMissileAlien = [];
 var collidableMeshList = [];
 var collidableAlienList = [];
 var alienSpeed = 1;
+var ufoSpeed = 6;
 var frequenceTir = 2000;
 var konamiCode = false;
 var spaceshipLife = 2, spaceshipIsTargetable = true;
@@ -133,13 +134,13 @@ function draw()
 		detectCollisionFromMissileAlien();
 		alienMouvement();
 		alienAttack();
-		ufoMecanics();
-		collidableAlienList.forEach(function(alien) {
-		   if(alien.position.x == spaceship.position.x && ingame){
-		       scene.remove(missile);
-			   mortVaisseau();
-		    }	
-		});
+		if(ufo==true){
+			ufoMecanics();
+		}
+		if(!ufo && !ufoBullet){
+			ufoAttack();
+		}
+
 		if(konamiCode){
 			var time = Date.now() * 0.0005;	
 			h = ( 360 * ( 1.0 + time ) % 360 ) / 360;
@@ -162,15 +163,15 @@ function draw()
 function ufoMecanics(){
 	var time = Date.now() * 0.00005;	
 	h = ( 360 * ( 1.0 + time ) % 360 ) / 360;
-	console.log(h);
-	if(h > 0.95 && h < 0.98){
-		
-	}
+		if(h > 0.95 && h < 0.951){
+			createAlien(180,650, "ufo");
+			ufo = false;
+		}
 }
 
 
 function createNewWaveAlien(){
-	pourcentageVitesseAlien+=0.3;
+	pourcentageVitesseAlien+=2;
 	var typeAlien;
 	typeAlien = "alien2";
 	while(positionInitialAlien!=450){	
@@ -184,6 +185,7 @@ function createNewWaveAlien(){
 		createAlien(120,positionInitialAlien,typeAlien);
 		createAlien(165,positionInitialAlien,typeAlien);
 		positionInitialAlien = positionInitialAlien-50;
+
 		if(typeAlien == "alien2"){
 			typeAlien = "alien3";
 		}

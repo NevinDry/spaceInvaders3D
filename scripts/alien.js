@@ -14,7 +14,7 @@ function createScud(alien, objectName){
         var scudMaterial;
 
         switch(objectName){
-            case 'scudUfo':
+            case 'ufo':
             var scudMaterial = new THREE.MeshLambertMaterial({color: 'red', shading: THREE.FlatShading});
             // arguments de la fonction returnMesh(sizeX, sizeY, sizeZ, posX, posY, posZ, itemMaterial)
 
@@ -22,6 +22,7 @@ function createScud(alien, objectName){
             THREE.GeometryUtils.merge(scudGeometry, returnCustomBoxMesh(2,6,5,0,0,0,scudGeometry));
 
             missileAlien = new THREE.Mesh(scudGeometry, scudMaterial);
+            missileAlien.name = "ufoBullet";
         break;
 
         //case 'scud1':
@@ -54,7 +55,8 @@ function createScud(alien, objectName){
 
             missileAlien = new THREE.Mesh(scudGeometry, scudMaterial);
             scudMaterial.side = THREE.DoubleSide;  
-            missileAlien.doubleSided = true;   
+            missileAlien.doubleSided = true;
+            missileAlien.name ="alien2Bullet";
         break;
 
         case 'alien3':
@@ -68,7 +70,8 @@ function createScud(alien, objectName){
             missileAlien = new THREE.Mesh(scudGeometry, scudMaterial);
 
             missileAlien.rotation.z = Math.PI/4;  
-            missileAlien.doubleSided = true;  
+            missileAlien.doubleSided = true; 
+            missileAlien.name ="alien3Bullet";
         break;     
     }        
 
@@ -92,7 +95,8 @@ function createScud(alien, objectName){
         var nameAlien;
         var alienGeometry = new THREE.Geometry();
         var alienMaterial;
-
+        
+        
         switch(objectName){
 
             //case 'alien1'
@@ -127,6 +131,7 @@ function createScud(alien, objectName){
             THREE.GeometryUtils.merge(alienGeometry, returnCustomBoxMesh(2,2,5,-3,6,0, alienMaterial));
             THREE.GeometryUtils.merge(alienGeometry, returnCustomBoxMesh(2,12,5,-1,9,0, alienMaterial));
             name ="alien3";
+            lol+=1;
         break;
 
         case 'ufo':
@@ -147,8 +152,7 @@ function createScud(alien, objectName){
             THREE.GeometryUtils.merge(alienGeometry, returnCustomBoxMesh(2,6,5,-1,4,0, alienMaterial)); 
             name ="ufo";
         break;
-    }
-
+}
     halfMesh = new THREE.Mesh(alienGeometry, alienMaterial);
 
     halfMesh.rotation.y = Math.PI;

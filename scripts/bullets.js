@@ -7,7 +7,6 @@ function playerMissile()
 	if (Key.isDown(Key.U))		
 	{
 		shotMissile = missileSpeed*2;
-
     }
 	if(missile.position.x > spaceship.position.x+gapWithMesh && missile.position.x < spaceship.position.x+20){
 		var audio = new Audio('./song/blast.wav');
@@ -27,19 +26,29 @@ function alienAttack(){
 	h = ( 360 * ( 1.0 + time ) % 360 ) / 360;
 	if(h > 0.95 && h < 0.98){
 		var alienShooter = Math.floor((Math.random() * collidableAlienList.length) + 0);
-		createScud(collidableAlienList[alienShooter], collidableAlienList[alienShooter].name);
+		if(collidableAlienList[alienShooter].name != "ufo"){
+			createScud(collidableAlienList[alienShooter], collidableAlienList[alienShooter].name);
+		}
 		//createMissileAlien();
 	}
-	if(h > 0.35 && h < 0.38){
+	if(h > 0.35 && h < 0.38){		
 		var alienShooter = Math.floor((Math.random() * collidableAlienList.length) + 0);
-		createScud(collidableAlienList[alienShooter]);
-		//createMissileAlien();
+		if(collidableAlienList[alienShooter].name != "ufo"){
+			createScud(collidableAlienList[alienShooter], collidableAlienList[alienShooter].name);
+		}
 	}
-	collidableMissileAlien.forEach(function(missile) {
-		 missile.position.x -= missileSpeed*0.5;
-		 if(missile.position.x < -400){
-			 scene.remove(missile);
-		 }
-	});
 	
+	collidableMissileAlien.forEach(function(missileAlien) {
+		missileAlien.position.x -= missileSpeed*0.5;
+		if(missileAlien.position.x < -390){
+			scene.remove(missileAlien);		
+		}
+	});
+}
+
+function ufoAttack(){
+	ufoBullet = true;
+	setTimeout(function(){createScud(scene.getObjectByName('ufo'), scene.getObjectByName('ufo').name)}, 100);
+	setTimeout(function(){createScud(scene.getObjectByName('ufo'), scene.getObjectByName('ufo').name)}, 1100);
+	setTimeout(function(){ufoBullet = false}, 2000);
 }

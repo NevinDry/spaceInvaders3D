@@ -40,13 +40,14 @@ function detectIfSpaceshipMissileCollisionAlien(){
 	  		shotMissile = 0;
 	  		//on recréé un missile sous le vaisseau
 	  		createMissile();
-	  		if(collidableAlienList.length == 0){
+	  		if(collisionsAlien[0].object.name == "ufo"){
+				ufo = true;
+	  		}
+	  		if(collidableAlienList.length == 0 && ufo || collidableAlienList.length == 1 && !ufo){
 	  			console.log("Enemis éliminés");
 	  			newWave();
-
 	  		}
-	  }
-	
+	  }	
 }
 
 
@@ -94,7 +95,6 @@ function detectShootSpeceshipFromAlien(missileUniqueAlien){
 			  console.log("end");
 			  mortVaisseau();
 		  }else{
-			  
 			  hitSpaceship();
 		  }
 

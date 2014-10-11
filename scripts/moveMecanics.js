@@ -56,6 +56,20 @@ function playerspaceShipMovement()
 
 function alienMouvement(){
 	collidableAlienList.forEach(function(alien) {
-	    alien.position.x -= alienSpeed*pourcentageVitesseAlien;
+		if(alien.position.y < -175 && alien.name ==  "ufo"){
+			collidableAlienList.splice(collidableAlienList.indexOf(alien),1);
+			scene.remove(alien);
+			ufo = true;
+		}
+		if(alien.name !=  "ufo"){
+			if(alien.position.x < spaceship.position.x){
+				console.log("Percution");
+				ingame = false;
+				mortVaisseau();
+			}
+		    alien.position.x -= alienSpeed*pourcentageVitesseAlien;
+		}else{
+			alien.position.y -= (ufoSpeed)*pourcentageVitesseAlien;
+		}
 	});
 }
