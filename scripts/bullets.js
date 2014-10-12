@@ -53,7 +53,7 @@ function alienAttack(){
 
 function ufoAttack(){
 	ufoBullet = true;
-	setTimeout(function(){createScud(scene.getObjectByName('ufo'), scene.getObjectByName('ufo').name)}, 100);
+	setTimeout(function(){createScud(scene.getObjectByName('ufo'), scene.getObjectByName('ufo').name)}, 200);
 	setTimeout(function(){createScud(scene.getObjectByName('ufo'), scene.getObjectByName('ufo').name)}, 1100);
 	setTimeout(function(){ufoBullet = false}, 2000);
 }

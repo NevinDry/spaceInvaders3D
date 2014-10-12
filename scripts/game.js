@@ -9,12 +9,13 @@ var fieldWidth = 800, fieldHeight = 400;
 var spaceShipWidth, spaceShipHeight, spaceShipDepth, spaceShipQuality, h, positionInitialAlien=650, ingame=false, gapWithMesh=1.3, spaceshipMaterial;
 var spaceShipDirY = 0, spaceShip2DirY = 0, spaceShipSpeed = 5, missileSpeed = 9, pourcentageVitesseAlien = 0, shotMissile = 0, begin = true;
 var missileAlien, score = 0, lol =0;;
-var ufo = true, ufoBullet= false, missileIsAlive = false;;
+var ufo = true, ufoBullet= false, missileIsAlive = false, shieldIsUp = false;
 var collidableMissileAlien = [];
 var collidableMeshList = [];
 var collidableAlienList = [];
 var alienSpeed = 1;
 var ufoSpeed = 6;
+var shield;
 var frequenceTir = 2000;
 var konamiCode = false;
 var spaceshipLife = 2, spaceshipIsTargetable = true;
@@ -156,6 +157,8 @@ function draw()
 				alien.material.color.setHSL( h, 0.25, 0.2 );
 			});
 		}
+		
+		//shield.material.uniforms.viewVector.value = new THREE.Vector3().subVectors( camera.position, shield.position );
 	}
 
 }
@@ -245,6 +248,7 @@ function  mortVaisseau(){
 }
 
 function hitSpaceship(){
+	  console.log('hit');
 	spaceshipIsTargetable = false;
 	scene.remove(missile);
 	spaceshipMaterial.opacity -= 1;

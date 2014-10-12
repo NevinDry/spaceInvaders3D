@@ -40,6 +40,9 @@ function detectIfSpaceshipMissileCollisionAlien(){
 	  		missileIsAlive = false;
 	  		if(collisionsAlien[0].object.name == "ufo"){
 				ufo = true;
+				if(!shieldIsUp){
+					createShield();
+				}
 	  		}
 	  		if(collidableAlienList.length == 0 && ufo || collidableAlienList.length == 1 && !ufo){
 	  			console.log("Enemis éliminés");
@@ -72,8 +75,7 @@ function detectCollisionFromMissileAlien(){
 		  		}
 		  }else{
 			  detectShootSpeceshipFromAlien(collidableMissileAlien[i]);
-		  }
-		  
+		  }  
 	}
 	
 }
@@ -85,9 +87,12 @@ function detectShootSpeceshipFromAlien(missileUniqueAlien){
 	casterSpaceship.far = missileSpeed*2;
 	
 	if(collisionsSpaceship.length > 0 && spaceshipIsTargetable) {
-		  console.log('hit');
-		  scene.remove(missile);
-		  scene.remove(missileUniqueAlien);
+		scene.remove(missile);
+		scene.remove(missileUniqueAlien);
+		if(shieldIsUp){
+			scene.remove(shield);
+			setTimeout(function(){shieldIsUp = false}, 200);
+		}else{
 		  spaceshipLife--;
 		  if(spaceshipLife == -1){
 			  console.log("end");
@@ -95,6 +100,6 @@ function detectShootSpeceshipFromAlien(missileUniqueAlien){
 		  }else{
 			  hitSpaceship();
 		  }
-
+		}
 	 }	
 }
