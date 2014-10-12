@@ -9,7 +9,7 @@ var fieldWidth = 800, fieldHeight = 400;
 var spaceShipWidth, spaceShipHeight, spaceShipDepth, spaceShipQuality, h, positionInitialAlien=650, ingame=false, gapWithMesh=1.3, spaceshipMaterial;
 var spaceShipDirY = 0, spaceShip2DirY = 0, spaceShipSpeed = 5, missileSpeed = 9, pourcentageVitesseAlien = 0, shotMissile = 0, begin = true;
 var missileAlien, score = 0, lol =0;;
-var ufo = true, ufoBullet= false;
+var ufo = true, ufoBullet= false, missileIsAlive = false;;
 var collidableMissileAlien = [];
 var collidableMeshList = [];
 var collidableAlienList = [];
@@ -96,16 +96,14 @@ function createElement(){
 	createSpaceship(fieldWidth);
 	console.log(spaceship);
 
-	//Créaton du premier missile (entity.js)
-	createMissile();
-
 	//Initialisation des bunker de départ (entity.js)
 
 	createBunker(120,100);
     createBunker(-120,100);
     createBunker(40,100);
     createBunker(-40,100);	
-    
+	missileIsAlive = false;
+
     createNewWaveAlien();
 }
 
@@ -129,8 +127,10 @@ function draw()
 		cameraPhysics();
 		playerspaceShipMovement();
 		playerMissile();
-		detectCollisionBunker();
-		detectIfSpaceshipMissileCollisionAlien();
+		if(missileIsAlive){
+			detectCollisionBunker();
+			detectIfSpaceshipMissileCollisionAlien();
+		}
 		detectCollisionFromMissileAlien();
 		alienMouvement();
 		alienAttack();
@@ -171,7 +171,7 @@ function ufoMecanics(){
 
 
 function createNewWaveAlien(){
-	pourcentageVitesseAlien+=2;
+	pourcentageVitesseAlien+=0.2;
 	var typeAlien;
 	typeAlien = "alien2";
 	while(positionInitialAlien!=450){	
@@ -257,9 +257,6 @@ function hitSpaceship(){
 	setTimeout(function(){spaceshipMaterial.opacity += 1},350);
 	setTimeout(function(){spaceshipMaterial.opacity -= 1},400);
 	setTimeout(function(){spaceshipMaterial.opacity += 1},450);
-
-	
-	setTimeout(function(){createMissile()},451);
 	setTimeout(function(){spaceshipIsTargetable = true},451);
 	$('.life').html("Vies : "+ spaceshipLife);
 }

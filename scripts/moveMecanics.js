@@ -41,11 +41,12 @@ function playerspaceShipMovement()
 	//deplacement
 	spaceship.position.y += spaceshipDirY;
 
+	/*
 	//si le missile est sous le vaisseau, il se deplace avec lui
 	if(missile.position.x == spaceship.position.x+1.3){
 		missile.position.y += spaceshipDirY;
 	}
-
+	*/
 
 	if (Key.isDown(Key.M))		
 	{
@@ -55,21 +56,22 @@ function playerspaceShipMovement()
 }
 
 function alienMouvement(){
-	collidableAlienList.forEach(function(alien) {
-		if(alien.position.y < -175 && alien.name ==  "ufo"){
-			collidableAlienList.splice(collidableAlienList.indexOf(alien),1);
-			scene.remove(alien);
+	for (var i = 0; i < collidableAlienList.length; i++) {
+		if(collidableAlienList[i].position.y < -175 && collidableAlienList[i].name ==  "ufo"){
+			scene.remove(collidableAlienList[i]);
+			collidableAlienList.splice(collidableAlienList.indexOf(collidableAlienList[i]),1);
 			ufo = true;
+			break;
 		}
-		if(alien.name !=  "ufo"){
-			if(alien.position.x < spaceship.position.x){
+		if(collidableAlienList[i].name !=  "ufo"){
+			if(collidableAlienList[i].position.x < spaceship.position.x){
 				console.log("Percution");
-				ingame = false;
 				mortVaisseau();
+				break;
 			}
-		    alien.position.x -= alienSpeed*pourcentageVitesseAlien;
+			collidableAlienList[i].position.x -= alienSpeed*pourcentageVitesseAlien;
 		}else{
-			alien.position.y -= (ufoSpeed)*pourcentageVitesseAlien;
+			collidableAlienList[i].position.y -= (ufoSpeed)*pourcentageVitesseAlien;
 		}
-	});
+	}
 }

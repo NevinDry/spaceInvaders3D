@@ -17,9 +17,8 @@ function detectCollisionBunker(){
 	  			collidableMeshList.splice(collidableMeshList.indexOf(collisionsBunker[0].object),1);
 	  			scene.remove(collisionsBunker[0].object);
 	  		}
+	  		missileIsAlive = false;
 	  		shotMissile = 0;
-	  		//on recrÃ©Ã© un missile sous le vaisseau
-	  		createMissile();
 	  }
 }
 
@@ -38,8 +37,7 @@ function detectIfSpaceshipMissileCollisionAlien(){
 	  		scene.remove(missile);
   			collidableAlienList.splice(collidableAlienList.indexOf(collisionsAlien[0].object),1);
 	  		shotMissile = 0;
-	  		//on recréé un missile sous le vaisseau
-	  		createMissile();
+	  		missileIsAlive = false;
 	  		if(collisionsAlien[0].object.name == "ufo"){
 				ufo = true;
 	  		}
