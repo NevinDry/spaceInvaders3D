@@ -12,6 +12,7 @@ var missileAlien, score = 0, lol =0;;
 var ufo = true, ufoBullet= false, missileIsAlive = false, shieldIsUp = false;
 var collidableMissileAlien = [];
 var collidableMeshList = [];
+var gapMovement = 0;
 var collidableAlienList = [];
 var alienSpeed = 1;
 var ufoSpeed = 6;

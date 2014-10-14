@@ -71,9 +71,14 @@ function alienMouvement(){
 				mortVaisseau();
 				break;
 			}
-			collidableAlienList[i].position.x -= alienSpeed*pourcentageVitesseAlien;
+			moveAlienMecanics(collidableAlienList[i]);
 		}else{
 			collidableAlienList[i].position.y -= (ufoSpeed)*pourcentageVitesseAlien;
 		}
 	}
+}
+
+function moveAlienMecanics(alien){
+	alien.position.x -= alienSpeed*pourcentageVitesseAlien;
+	
 }
