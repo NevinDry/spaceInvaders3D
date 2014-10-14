@@ -25,8 +25,20 @@ function createScud(alien, objectName){
             missileAlien.name = "ufoBullet";
         break;
 
-        //case 'scud1':
-        //break;
+        case 'alien1':
+            var scudMaterial = new THREE.MeshLambertMaterial({color: 'blue', shading: THREE.FlatShading });
+
+            THREE.GeometryUtils.merge(scudGeometry, returnCustomBoxMesh(4,2,5,-1,1,0, scudMaterial));
+            THREE.GeometryUtils.merge(scudGeometry, returnCustomBoxMesh(4,2,5,1,-1,0, scudMaterial));
+
+            scudMesh = new THREE.Mesh(scudGeometry, scudMaterial);
+
+			missileAlien = new THREE.Mesh(scudGeometry, scudMaterial);
+			missileAlien.rotation.z = -Math.PI/4;
+            missileAlien.doubleSided = true;  
+
+            missileAlien.name ="alien1Bullet";
+			break;
         
         case 'alien2':
             var scudMaterial = new THREE.MeshLambertMaterial({color: 'green', shading: THREE.FlatShading });
@@ -60,7 +72,7 @@ function createScud(alien, objectName){
         break;
 
         case 'alien3':
-            var scudMaterial = new THREE.MeshLambertMaterial({color: 'blue', shading: THREE.FlatShading });
+            var scudMaterial = new THREE.MeshLambertMaterial({color: 'darkmagenta', shading: THREE.FlatShading });
 
             THREE.GeometryUtils.merge(scudGeometry, returnCustomBoxMesh(2,6,5,0,1,0, scudMaterial));
             THREE.GeometryUtils.merge(scudGeometry, returnCustomBoxMesh(2,2,5,2,3,0, scudMaterial));
@@ -99,8 +111,23 @@ function createScud(alien, objectName){
         
         switch(objectName){
 
-            //case 'alien1'
-        //break;
+          case 'alien1':
+            alienMaterial = new THREE.MeshLambertMaterial({color: 'blue'});
+
+            // arguments de la fonction returnMesh(sizeX, sizeY, sizeZ, posX, posY, posZ, itemMaterial)
+
+            THREE.GeometryUtils.merge(alienGeometry, returnCustomBoxMesh(2,6,5,-11,8,0, alienMaterial));
+            THREE.GeometryUtils.merge(alienGeometry, returnCustomBoxMesh(2,8,5,-9,9,0, alienMaterial));
+            THREE.GeometryUtils.merge(alienGeometry, returnCustomBoxMesh(2,2,5,-9,2,0, alienMaterial));
+            THREE.GeometryUtils.merge(alienGeometry, returnCustomBoxMesh(2,14,5,-7,6,0, alienMaterial));
+            THREE.GeometryUtils.merge(alienGeometry, returnCustomBoxMesh(2,2,5,-5,0,0, alienMaterial));
+            THREE.GeometryUtils.merge(alienGeometry, returnCustomBoxMesh(4,4,5,-4,5,0, alienMaterial));
+            THREE.GeometryUtils.merge(alienGeometry, returnCustomBoxMesh(6,4,5,-3,11,0, alienMaterial));
+            THREE.GeometryUtils.merge(alienGeometry, returnCustomBoxMesh(4,2,5,-2,14,0, alienMaterial));
+            THREE.GeometryUtils.merge(alienGeometry, returnCustomBoxMesh(2,4,5,-1,7,0, alienMaterial));
+            THREE.GeometryUtils.merge(alienGeometry, returnCustomBoxMesh(2,2,5,-1,2,0, alienMaterial));
+            name = "alien1";
+        break;
 
         case 'alien2':
             var alienMaterial = new THREE.MeshLambertMaterial({color: 'green'});
@@ -119,7 +146,7 @@ function createScud(alien, objectName){
         break;
 
         case 'alien3':
-            var alienMaterial = new THREE.MeshLambertMaterial({color: 'blue'});
+            var alienMaterial = new THREE.MeshLambertMaterial({color: 0x7C0057});
 
             // arguments de la fonction returnMesh(sizeX, sizeY, sizeZ, posX, posY, posZ, itemMaterial)
 

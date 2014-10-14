@@ -87,7 +87,6 @@ function detectShootSpeceshipFromAlien(missileUniqueAlien){
 	casterSpaceship.far = missileSpeed*2;
 	
 	if(collisionsSpaceship.length > 0 && spaceshipIsTargetable) {
-		scene.remove(missile);
 		scene.remove(missileUniqueAlien);
 		if(shieldIsUp){
 			scene.remove(shield);

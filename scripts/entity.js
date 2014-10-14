@@ -26,9 +26,9 @@ function createPlane(fieldwidth, fieldheight){
 	var tableMaterial =
 	  new THREE.MeshLambertMaterial(
 		{
-		  color: 0x111111,
+		  color: 0xFEFEFE,
 		  transparent: true,
-		  opacity: 0.8
+		  opacity: 0.1
 
 		});
 
@@ -54,86 +54,54 @@ Création du vaisseau, placé au milieu de l'air de jeu
 */
 function createSpaceship(){
     var spaceshipGeometry = new THREE.Geometry();
-    spaceshipMaterial = new THREE.MeshLambertMaterial({color: 0x840000,transparent: true});
-    
-    var boxGeometry1 = new THREE.BoxGeometry(30, 6, 10);
-    
-    boxMesh1 = new THREE.Mesh(boxGeometry1, spaceshipMaterial);
-    boxMesh1.position.x = 0;
-    boxMesh1.position.y = 0;
-    boxMesh1.position.z = 0;
+    spaceshipMaterial = new THREE.MeshLambertMaterial({color: 'red', transparent:true});
 
-    THREE.GeometryUtils.merge(spaceshipGeometry, boxMesh1);
- 
-    var boxGeometry2 = new THREE.BoxGeometry(26,2,10);
-    boxMesh2 = new THREE.Mesh(boxGeometry2, spaceshipMaterial);
-    boxMesh2.position.x = 0;
-    boxMesh2.position.y = 4;
-    boxMesh2.position.z = 0;
-
-    THREE.GeometryUtils.merge(spaceshipGeometry, boxMesh2);
-
-    var boxGeometry3 = new THREE.BoxGeometry(6,4,10);
-    boxMesh3 = new THREE.Mesh(boxGeometry3, spaceshipMaterial);
-    boxMesh3.position.x = 0;
-    boxMesh3.position.y = 6;
-    boxMesh3.position.z = 0;
-
-    THREE.GeometryUtils.merge(spaceshipGeometry, boxMesh3);
-
-    var boxGeometry4 = new THREE.BoxGeometry(2,2,10);
-    boxMesh4 = new THREE.Mesh(boxGeometry4, spaceshipMaterial);
-    boxMesh4.position.x = 0;
-    boxMesh4.position.y = 9;
-    boxMesh4.position.z = 0;
-
-    THREE.GeometryUtils.merge(spaceshipGeometry, boxMesh4);
+    // arguments de la fonction returnMesh(sizeX, sizeY, sizeZ, posX, posY, posZ, itemMaterial)
   
-    spaceshipGeometry.computeFaceNormals();
+    THREE.GeometryUtils.merge(spaceshipGeometry, returnCustomBoxMesh(30,6,7.5,0,0,0,spaceshipMaterial));       
+    THREE.GeometryUtils.merge(spaceshipGeometry, returnCustomBoxMesh(26,2,7.5,0,4,0,spaceshipMaterial));
+    THREE.GeometryUtils.merge(spaceshipGeometry, returnCustomBoxMesh(6,4,7.5,0,7,0,spaceshipMaterial));
+    THREE.GeometryUtils.merge(spaceshipGeometry, returnCustomBoxMesh(2,2,7.5,0,10,0,spaceshipMaterial));
+  
+    spaceshipGeometry.mergeVertices();
+    spaceshipGeometry.computeVertexNormals();
+    //spaceshipGeometry.computeFaceNormals();
 
     spaceship = new THREE.Mesh(spaceshipGeometry, spaceshipMaterial);
     spaceship.receiveShadow = true;
     spaceship.castShadow = true;
-    spaceship.castShadow = true;
 	spaceship.position.x = -fieldWidth/2+30;
 	spaceship.position.z = 15;
 	spaceship.rotateOnAxis(new THREE.Vector3(0,0,-1), Math.PI/2);
-	
     spaceship.updateMatrix();
-    
     scene.add(spaceship);
 }
 
 function createShield(){
 	shieldIsUp = true;
-	 /*
-	var smoothCubeGeom = spaceship.clone();
+	/* 
+	var smoothCubeGeom = spaceship.geometry.clone();
 	var modifier = new THREE.SubdivisionModifier( 2 );
 	modifier.modify( smoothCubeGeom );
-	*/	
+	*/
 	var customMaterial = new THREE.ShaderMaterial( 
     		{
     		    uniforms: 
     			{ 
-    				"c":   { type: "f", value: 1.0 },
+    				"c":   { type: "f", value: 0.8 },
     				"p":   { type: "f", value: 1.4 },
     				glowColor: { type: "c", value: new THREE.Color(0xffff00) },
     				viewVector: { type: "v3", value: camera.position }
     			},
-    			vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
-    			fragmentShader: document.getElementById( 'fragmentShader' ).textContent,
+    			vertexShader:   document.getElementById('vertexShader').textContent,
+    			fragmentShader: document.getElementById('fragmentShader').textContent,
     			side: THREE.FrontSide,
     			blending: THREE.AdditiveBlending,
     			transparent: true
     });
 	shield = new THREE.Mesh(spaceship.geometry.clone(), customMaterial.clone());
-	shield.material.uniforms[ "c" ].value = 0.6;
-	shield.material.uniforms[ "p" ].value = 1.4; 
-	/*
 	shield.receiveShadow = true;
 	shield.castShadow = true;
-	shield.castShadow = true;
-     */
 	shield.rotateOnAxis(new THREE.Vector3(0,0,-1), Math.PI/2);
 	shield.position = spaceship.position;
 	shield.scale.multiplyScalar(1.2);
@@ -184,13 +152,13 @@ function createLight(){
 	pointLight.position.x = -1000;
 	pointLight.position.y = 0;
 	pointLight.position.z = 1000;
-	pointLight.intensity = 4;
+	pointLight.intensity = 3;
 	pointLight.distance = 10000;
 	scene.add(pointLight);
 
     spotLight = new THREE.SpotLight(0xF8D898);
     spotLight.position.set(0, 0, 860);
-    spotLight.intensity = 1.5;
+    spotLight.intensity = 0.5;
     spotLight.castShadow = true;
     scene.add(spotLight);
 

@@ -107,7 +107,7 @@ html, body, iframe { border: 0; }
 .annonce{
 	color: red;
 	position: absolute;
-	top: 100px;
+	top: 10%;
 	right: 1px;;
 	width: 180px;
 	font-size: 31px;
@@ -119,7 +119,7 @@ float: right;
 width: 180px;
 font-size: 31px;
 position: absolute;
-top: 300px;
+top: 25%;
 right: 1px;
 display:none;
 }
@@ -130,7 +130,17 @@ float: right;
 width: 180px;
 font-size: 31px;
 position: absolute;
-top: 380px;
+top: 30%;
 right: 1px;
 display:none;
+}
+
+.highscore{
+color: white;
+float: right;
+width: 250px;
+font-size: 25px;
+position: absolute;
+top: 25%;
+left: 5px;
 }

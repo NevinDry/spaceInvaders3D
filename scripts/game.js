@@ -3,7 +3,7 @@
 var renderer, scene, camera, pointLight, spotLight;
 
 // field variables
-var fieldWidth = 800, fieldHeight = 400;
+var fieldWidth = 800, fieldHeight = 500;
 
 // spaceShip variables
 var spaceShipWidth, spaceShipHeight, spaceShipDepth, spaceShipQuality, h, positionInitialAlien=650, ingame=false, gapWithMesh=1.3, spaceshipMaterial;
@@ -27,6 +27,7 @@ Appel aux fonctions de création de l'environenement et de démarrage
 function setup()
 {
 	createScene();
+	updateHighScore();
 	draw();
 }
 
@@ -64,6 +65,7 @@ function createScene()
 
 function gamePlay(){	
 	splashScreenBeforeGame();
+	updateHighScore();
 	score = 0;
 	spaceshipLife = 2;
 	$('.life').html("Vies : "+ spaceshipLife);
@@ -172,47 +174,57 @@ function ufoMecanics(){
 		}
 }
 
-
 function createNewWaveAlien(){
 	pourcentageVitesseAlien+=0.2;
 	var typeAlien;
-	typeAlien = "alien2";
-	while(positionInitialAlien!=450){	
-		createAlien(30,positionInitialAlien, typeAlien);
-		console.log(collidableAlienList);
-		createAlien(-15,positionInitialAlien, typeAlien);
-		createAlien(75,positionInitialAlien, typeAlien);
-		createAlien(-60,positionInitialAlien,typeAlien);
-		createAlien(-100,positionInitialAlien,typeAlien);
-		createAlien(-145,positionInitialAlien,typeAlien);
-		createAlien(120,positionInitialAlien,typeAlien);
-		createAlien(165,positionInitialAlien,typeAlien);
-		positionInitialAlien = positionInitialAlien-50;
-
-		if(typeAlien == "alien2"){
-			typeAlien = "alien3";
+	typeAlien = "alien3";
+	while(positionInitialAlien !=400){
+		if(typeAlien != "alien3"){
+			for(var i = 0; i < 2; i++){
+				createAlien(30,positionInitialAlien, typeAlien);
+				console.log(collidableAlienList);
+				createAlien(-15,positionInitialAlien, typeAlien);
+				createAlien(75,positionInitialAlien, typeAlien);
+				createAlien(-60,positionInitialAlien,typeAlien);
+				createAlien(-100,positionInitialAlien,typeAlien);
+				createAlien(-145,positionInitialAlien,typeAlien);
+				createAlien(120,positionInitialAlien,typeAlien);
+				createAlien(165,positionInitialAlien,typeAlien);
+				positionInitialAlien = positionInitialAlien-50;
+			}
+			if(typeAlien == "alien2"){
+				typeAlien = "alien1";
+			}
 		}
 		else{
+			createAlien(30,positionInitialAlien, typeAlien);
+			console.log(collidableAlienList);
+			createAlien(-15,positionInitialAlien, typeAlien);
+			createAlien(75,positionInitialAlien, typeAlien);
+			createAlien(-60,positionInitialAlien,typeAlien);
+			createAlien(-100,positionInitialAlien,typeAlien);
+			createAlien(-145,positionInitialAlien,typeAlien);
+			createAlien(120,positionInitialAlien,typeAlien);
+			createAlien(165,positionInitialAlien,typeAlien);
+			positionInitialAlien = positionInitialAlien-50;
 			typeAlien = "alien2";
 		}
-		
 	}
 }
-
 /* 
 Definition des mouvement de camera
 */
 function cameraPhysics()
 {	
 	// On fait en sorte que la camera suive notre vaisseau
-	camera.position.x = spaceship.position.x - 100;
+	camera.position.x = spaceship.position.x - 120;
 	camera.position.y += (spaceship.position.y - camera.position.y) * 0.05;
-	camera.position.z = spaceship.position.z + 100 + 0.04 * (-spaceship.position.x + spaceship.position.x);
+	camera.position.z = spaceship.position.z + 130 + 0.04 * (-spaceship.position.x + spaceship.position.x);
 	
 	//On palce la camera correctement face au plan 
 	camera.rotation.x = -0.01 * (spaceship.position.y) * Math.PI/180;
-	camera.rotation.y = -60 * Math.PI/180;
-	camera.rotation.z = -90 * Math.PI/180;
+	camera.rotation.y = - Math.PI/3;
+	camera.rotation.z = - Math.PI/2;
 }
 
 function  mortVaisseau(){
@@ -243,6 +255,9 @@ function  mortVaisseau(){
 	setTimeout(function(){$('#gameCanvas').css("-webkit-filter", "blur(5px)")},900);
 	$('.scoreReplay').html("Score : "+ score);
 	setTimeout(function(){$('.gameOver').css({"display": "block"})},900);
+	
+	//gestion du highscore
+	setTimeout(function(){show_prompt()},900);
 	begin = true;
    
 }
@@ -250,7 +265,6 @@ function  mortVaisseau(){
 function hitSpaceship(){
 	  console.log('hit');
 	spaceshipIsTargetable = false;
-	scene.remove(missile);
 	spaceshipMaterial.opacity -= 1;
 	setTimeout(function(){spaceshipMaterial.opacity += 1},50);
 	setTimeout(function(){spaceshipMaterial.opacity -= 1},100);

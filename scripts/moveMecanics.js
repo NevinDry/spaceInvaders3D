@@ -57,7 +57,7 @@ function playerspaceShipMovement()
 
 function alienMouvement(){
 	for (var i = 0; i < collidableAlienList.length; i++) {
-		if(collidableAlienList[i].position.y < -175 && collidableAlienList[i].name ==  "ufo"){
+		if(collidableAlienList[i].position.y < -185 && collidableAlienList[i].name ==  "ufo"){
 			scene.remove(collidableAlienList[i]);
 			collidableAlienList.splice(collidableAlienList.indexOf(collidableAlienList[i]),1);
 			ufo = true;
@@ -66,6 +66,8 @@ function alienMouvement(){
 		if(collidableAlienList[i].name !=  "ufo"){
 			if(collidableAlienList[i].position.x < spaceship.position.x){
 				console.log("Percution");
+				scene.remove(shield);
+				shieldIsUp = false;
 				mortVaisseau();
 				break;
 			}
