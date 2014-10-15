@@ -71,14 +71,32 @@ function alienMouvement(){
 				mortVaisseau();
 				break;
 			}
-			moveAlienMecanics(collidableAlienList[i]);
+			if(AlienMoveLeft == true){
+				if(collidableAlienList[i].position.y < -185 && collidableAlienList[i].name !=  "ufo"){
+					alienMoveDown();
+					AlienMoveLeft = false;
+				}
+				collidableAlienList[i].position.y -= alienSpeed*pourcentageVitesseAlien;
+			}
+
+			if(AlienMoveLeft == false){
+				if(collidableAlienList[i].position.y > 185 && collidableAlienList[i].name !=  "ufo"){
+					alienMoveDown();
+					AlienMoveLeft = true;
+				}
+				collidableAlienList[i].position.y += alienSpeed*pourcentageVitesseAlien;
+			}
 		}else{
 			collidableAlienList[i].position.y -= (ufoSpeed)*pourcentageVitesseAlien;
 		}
 	}
 }
 
-function moveAlienMecanics(alien){
-	alien.position.x -= alienSpeed*pourcentageVitesseAlien;
-	
+// faire descendre les aliens tj plus bas :)
+function alienMoveDown(){
+	for (var i = 0; i < collidableAlienList.length; i++) {
+		if(collidableAlienList[i].name !=  "ufo"){
+			collidableAlienList[i].position.x -= alienSpeed*pourcentageVitesseAlien*100;
+		}
+	}
 }

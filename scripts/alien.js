@@ -192,6 +192,8 @@ function createScud(alien, objectName){
     alien.position.x = spaceship.position.x+distance;
 	alien.position.y = position;
 	alien.position.z = 10;
+	alien.positionInitiale = position;
+	alien.distanceInitiale = distance+spaceship.position.x;
 	alien.scale.set(1.5, 1.5, 1.5);
 	alien.name = name;
 	alien.rotateOnAxis(new THREE.Vector3(0,0,-1), Math.PI/2);

@@ -30,13 +30,13 @@ function playerMissile()
 function alienAttack(){
 	var time = Date.now() * 0.0005;	
 	h = ( 360 * ( 1.0 + time ) % 360 ) / 360;
-	if(h > 0.95 && h < 0.96){
+	if(h > 0.95 && h < 0.98){
 		var alienShooter = Math.floor((Math.random() * collidableAlienList.length) + 0);
 		if(collidableAlienList[alienShooter].name != "ufo"){
 			createScud(collidableAlienList[alienShooter], collidableAlienList[alienShooter].name);
 		}
 	}
-	if(h > 0.35 && h < 0.36){		
+	if(h > 0.35 && h < 0.38){		
 		var alienShooter = Math.floor((Math.random() * collidableAlienList.length) + 0);
 		if(collidableAlienList[alienShooter].name != "ufo"){
 			createScud(collidableAlienList[alienShooter], collidableAlienList[alienShooter].name);

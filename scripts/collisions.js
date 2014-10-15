@@ -30,15 +30,17 @@ function detectIfSpaceshipMissileCollisionAlien(){
 	  //On test s'il y a une collision
 	  var collisionsAlien = casterAlien.intersectObjects(collidableAlienList);
 	  if (collisionsAlien.length > 0) {
-		  if(collisionsAlien[0].object.name == "alien1"){	
-			  var audio = new Audio('./song/alien3.wav');
-		  }else if(collisionsAlien[0].object.name == "alien2"){
-			  var audio = new Audio('./song/alien2.ogg');
-		  }else if(collisionsAlien[0].object.name == "alien3"){
-			  var audio = new Audio('./song/alien1.wav');
-		  }else{
-			  var audio = new Audio('./song/ufo.wav');
-		  }
+		  	if(collisionsAlien[0].object.name == "alien1"){
+		  		var audio = new Audio('./song/alien3.wav');
+		  	}else if(collisionsAlien[0].object.name == "alien2"){
+		  		var audio = new Audio('./song/alien2.ogg');
+		  	}else if(collisionsAlien[0].object.name == "alien3"){
+		  		var audio = new Audio('./song/alien1.wav');
+
+		  	}else{
+		  		var audio = new Audio('./song/ufo.wav');
+		  	}
+			
 			audio.play();
 			afficherScore(50);
 			scene.remove(collisionsAlien[0].object);

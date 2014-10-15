@@ -3,18 +3,18 @@
 var renderer, scene, camera, pointLight, spotLight;
 
 // field variables
-var fieldWidth = 800, fieldHeight = 500;
+var fieldWidth = 800, fieldHeight = 450;
 
 // spaceShip variables
 var spaceShipWidth, spaceShipHeight, spaceShipDepth, spaceShipQuality, h, positionInitialAlien=650, ingame=false, gapWithMesh=1.3, spaceshipMaterial;
 var spaceShipDirY = 0, spaceShip2DirY = 0, spaceShipSpeed = 5, missileSpeed = 9, pourcentageVitesseAlien = 0, shotMissile = 0, begin = true;
+var AlienMoveLeft = true;
 var missileAlien, score = 0, lol =0;;
 var ufo = true, ufoBullet= false, missileIsAlive = false, shieldIsUp = false;
 var collidableMissileAlien = [];
 var collidableMeshList = [];
-var gapMovement = 0;
 var collidableAlienList = [];
-var alienSpeed = 1;
+var alienSpeed = 1.5;
 var ufoSpeed = 6;
 var shield;
 var frequenceTir = 2000;
@@ -176,7 +176,7 @@ function ufoMecanics(){
 }
 
 function createNewWaveAlien(){
-	pourcentageVitesseAlien+=0.2;
+	pourcentageVitesseAlien+=0.1;
 	var typeAlien;
 	typeAlien = "alien3";
 	while(positionInitialAlien !=400){
@@ -235,9 +235,9 @@ function  mortVaisseau(){
 	 collidableMissileAlien.forEach(function(alienMissile) {
 	    scene.remove(alienMissile);
 	});
-	var audio = new Audio('./song/boom.mp3');
-	ingame=false;
+	var audio = new Audio('./song/boom.wav');
 	audio.play();
+	ingame=false;
 	positionInitialAlien=650;
 	spaceship.position.y += 2;
 	spaceshipMaterial.opacity -= 0.2;
@@ -256,15 +256,16 @@ function  mortVaisseau(){
 	setTimeout(function(){$('#gameCanvas').css("-webkit-filter", "blur(5px)")},900);
 	$('.scoreReplay').html("Score : "+ score);
 	setTimeout(function(){$('.gameOver').css({"display": "block"})},900);
-	
 	//gestion du highscore
-	setTimeout(function(){show_prompt()},900);
+	setTimeout(function(){show_prompt(score)},900);
 	begin = true;
    
 }
 
 function hitSpaceship(){
 	  console.log('hit');
+		var audio = new Audio('./song/hit.mp3');
+		audio.play();
 	spaceshipIsTargetable = false;
 	spaceshipMaterial.opacity -= 1;
 	setTimeout(function(){spaceshipMaterial.opacity += 1},50);
