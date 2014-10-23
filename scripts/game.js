@@ -128,6 +128,7 @@ function draw()
 	renderer.render(scene, camera);
 	requestAnimationFrame(draw);
 	if(ingame){
+		//testInterval();
 		cameraPhysics();
 		playerspaceShipMovement();
 		playerMissile();
@@ -164,6 +165,14 @@ function draw()
 		//shield.material.uniforms.viewVector.value = new THREE.Vector3().subVectors( camera.position, shield.position );
 	}
 
+}
+
+function testInterval(){
+	var time = Date.now() * 0.0005;	
+	h = ( 360 * ( 1.0 + time ) % 360 ) / 360;
+	if(h > 0.95 && h < 0.96){
+		
+	}
 }
 
 function ufoMecanics(){
